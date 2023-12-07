@@ -6,7 +6,7 @@ public class Repeater : BTNode    //Hereda directamente de BTNode. En general es
 {
     public BTNode Child { get; set; }
 
-    public Repeater(BehaviorTree tree, BTNode child) : base(tree)
+    public Repeater(BehaviourTree tree, BTNode child) : base(tree)
     {
         Child = child;
     }

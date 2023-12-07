@@ -8,7 +8,7 @@ public class Selector : BTNode
 
     private int actualNode = 0;
 
-    public Selector(BehaviorTree tree, BTNode[] nodes) : base(tree)
+    public Selector(BehaviourTree tree, BTNode[] nodes) : base(tree)
     {
         Children = new List<BTNode>(nodes); //Cosntructor
     }

@@ -7,9 +7,9 @@ public class BTNode : MonoBehaviour     //De esta clase heredarán el resto de n
 {
     public enum Result { Running, Failure, Success };
 
-    public BehaviorTree Tree { get; }
+    public BehaviourTree Tree { get; }
 
-    public BTNode(BehaviorTree tree)
+    public BTNode(BehaviourTree tree)
     {
         Tree = tree;
     }

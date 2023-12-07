@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BehaviorTree : MonoBehaviour
+public class BehaviourTree : MonoBehaviour
 {
-    public BTNode planningRoot; //Nos da el árbol para plantear estrategias
+    [HideInInspector]public BTNode planningRoot; //Nos da el árbol para plantear estrategias
     private BTNode unitRoot;    //Nos da el árbol para unidades
 
     //Puede haber más árboles...
@@ -13,7 +13,7 @@ public class BehaviorTree : MonoBehaviour
 
     void Awake()
     {
-        InitializeBlackboard();
+        InitializeBlackboard(); //Para usar datos dentro del árbol
         CreatePlanningRoot();
         // CreateUnitRoot(); 
     }
@@ -31,20 +31,17 @@ public class BehaviorTree : MonoBehaviour
 
     private void InitializeBlackboard()
     {
-        Blackboard = new Dictionary<string, object>();
-        Blackboard.Add("WorldBounds", new Rect(0, 0, 5, 5));
+        //Blackboard = new Dictionary<string, object>();
+        //Blackboard.Add("wb", new Rect(0, 0, 0, 0));
     }
 
     private void CreatePlanningRoot()
     {
         BTNode planningTree = new Repeater(
-            this,
-            new Sequencer(
-                this,
-                new BTNode[] {
-                    //VA LA ESTRUCTURA DE NODOS
-                }
-            )
+            this, new Sequencer (this, new BTNode[] { new SaveMoney(this),
+                                                       new Repeater(this, new Selector(this, new BTNode[] { new BuySoldier(this)})) 
+                                                     }
+                                 )
         );
 
         planningRoot = planningTree;

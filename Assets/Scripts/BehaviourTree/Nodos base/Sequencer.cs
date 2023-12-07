@@ -7,7 +7,7 @@ public class Sequencer : BTNode
     public List<BTNode> Children { get; }  //La lista de hijos
 
     private int actualNode = 0;
-    public Sequencer(BehaviorTree tree, BTNode[] nodes) : base(tree)  //Cosntructor
+    public Sequencer(BehaviourTree tree, BTNode[] nodes) : base(tree)  //Cosntructor
     {
         Children = new List<BTNode>(nodes);
     }
