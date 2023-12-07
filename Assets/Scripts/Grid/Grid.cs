@@ -39,8 +39,6 @@ public class Grid : MonoBehaviour
         }
     }
 
-
-
     void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, gridWorldSize.y, 1));
@@ -59,6 +57,50 @@ public class Grid : MonoBehaviour
 
                 Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - 0.1f));
             }
+        }
+    }
+
+    public Node NodeFromWorldPoint(Vector3 worldPosition)   //Se usa para el pathfinding y al crear sprites <<--- NO CAMBIAR!!!
+    { 
+        float percentX = (worldPosition.x + gridWorldSize.x / 2) / gridWorldSize.x;
+        float percentY = (worldPosition.y + gridWorldSize.y / 2) / gridWorldSize.y;
+        percentX = Mathf.Clamp01(percentX);
+        percentY = Mathf.Clamp01(percentY);
+
+        int x = Mathf.RoundToInt((gridSizeX - 1) * percentX);
+        int y = Mathf.RoundToInt((gridSizeY - 1) * percentY);
+
+        return grid[x, y];
+    }
+
+    
+    public Vector3 GetRandomWalkablePosition() // Método para obtener una posición walkable y colocar las unidades <<--- NO CAMBIAR!!!
+    {
+        // Obtener todas las posiciones walkable disponibles
+        List<Vector3> walkablePositions = new List<Vector3>();
+
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                if (grid[x, y].walkable)
+                {
+                    walkablePositions.Add(grid[x, y].worldPosition);
+                }
+            }
+        }
+
+        // Verificar si hay posiciones walkable disponibles
+        if (walkablePositions.Count > 0)
+        {
+            // Seleccionar una posición aleatoria de la lista
+            int randomIndex = Random.Range(0, walkablePositions.Count);
+            return walkablePositions[randomIndex];
+        }
+        else    //<- No debería de ocurrir nunca
+        {
+            Debug.LogWarning("No hay posiciones walkable disponibles.");    
+            return Vector3.zero; // Otra opción sería devolver null
         }
     }
 

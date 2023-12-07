@@ -39,7 +39,10 @@ public class BehaviourTree : MonoBehaviour
     {
         BTNode planningTree = new Repeater(
             this, new Sequencer (this, new BTNode[] { new SaveMoney(this),
-                                                       new Repeater(this, new Selector(this, new BTNode[] { new BuySoldier(this)})) 
+                                                       new Repeater(this, new Selector(this, new BTNode[] { 
+                                                                                                            new BuySoldier(this),
+                                                                                                            new BuyHouse(this)
+                                                                                                          })) 
                                                      }
                                  )
         );

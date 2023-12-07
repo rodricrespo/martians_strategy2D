@@ -6,8 +6,14 @@ public class GameManager : MonoBehaviour
 {
     public int playerResources = 0;
     public int AIresources = 0;
+    public int AIHouses = 0;
+    public int playerHouses = 0;
+    public int playerResourcesMultiplier = 1;
+    public int AIresourcesMultiplier = 1;
     public int currentTurn = 0;
     public BehaviourTree behaviourTree;
+    public GameObject enemySpaceshipPrefab;
+    public Grid grid;
 
     private List<Unit> enemyUnits = new List<Unit>();
     
@@ -22,7 +28,6 @@ public class GameManager : MonoBehaviour
         if (currentTurn == 2) return;
 
         if (Input.GetKeyDown(KeyCode.Space)) EndTurn();
-        
     }
 
     public void EndTurn() {
@@ -50,28 +55,12 @@ public class GameManager : MonoBehaviour
 
         StopAllCoroutines();
 
-        // Then move the troops
         foreach (Unit unit in enemyUnits)
         {
             
-            // if (!unit.isBlueKing)
-            // {
-            //     unit.uRoot = new BTRepeater(behaviorTree, new BTSelector(behaviorTree, new BTNode[] {
-            //     new BTRepeater(behaviorTree, new BTSequencer(behaviorTree, new BTNode [] { new BTCheckRange(behaviorTree, unit), new BTAttackUnit(behaviorTree, unit)})),
-            //     new BTRepeater(behaviorTree, new BTSequencer(behaviorTree, new BTNode[] { new BTMoveUnit(behaviorTree, unit), new BTWaitNode(behaviorTree), new BTCheckRange(behaviorTree, unit), new BTAttackUnit(behaviorTree, unit) })) }));
-            // }
-
-            // else
-            // {
-            //     unit.uRoot = new BTRepeater(behaviorTree, new BTSelector(behaviorTree, new BTNode[] {
-            //     new BTRepeater(behaviorTree, new BTSequencer(behaviorTree, new BTNode [] { new BTCheckRange(behaviorTree, unit), new BTAttackUnit(behaviorTree, unit)})),
-            //     new BTRepeater(behaviorTree, new BTSequencer(behaviorTree, new BTNode[] { new BTFleeKing(behaviorTree, unit), new BTWaitNode(behaviorTree), new BTCheckRange(behaviorTree, unit), new BTAttackUnit(behaviorTree, unit) })) }));
-            // }
-
+            // HACER EL ARBOL DE LAS UNDIADES AQUI, O EN BehaviourTree
             //StartCoroutine(behaviorTree.RunBehavior(unit.unitRoot));
             
-
-            //StartCoroutine(unit.Act());
             yield return new WaitForSeconds(1.75f);
         }
 
@@ -79,7 +68,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void UpdateResources() {
-        playerResources += 5;
-        AIresources += 5;
+        playerResources += 5 * playerResourcesMultiplier;
+        AIresources += 5 * AIresourcesMultiplier;
     }
 }

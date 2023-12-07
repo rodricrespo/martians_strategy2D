@@ -2,23 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SaveMoney : BTNode
+public class BuyHouse : BTNode
 {
     private GameManager gm;
     private GameObject gameLogicObject;
 
-    public SaveMoney(BehaviourTree t) : base(t)
+    public BuyHouse(BehaviourTree t) : base(t)
     {
-        //gm = GameObject.Find("GameLogic").GetComponent<GameManager>();
         gameLogicObject = GameObject.Find("GameLogic");
         gm = gameLogicObject.GetComponent<GameManager>();
     }
 
     public override Result Execute()
     {
-        if (gm.AIresources < 10) return Result.Failure;
+        if (gm.AIresources < 100) return Result.Failure;
         else {
-            Debug.Log("LA IA TIENE MÁS DE 10");
+            Debug.Log("SE COMPRA UNA CASA");
+            gm.AIresourcesMultiplier = 2;
+            gm.AIresources -= 100;
             return Result.Success;
         }
     }
