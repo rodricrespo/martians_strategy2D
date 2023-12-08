@@ -30,7 +30,10 @@ public class PlayerManager : MonoBehaviour
             Vector3 randomWalkablePosition = grid.GetRandomWalkablePosition(); // Obtener una posición walkable aleatoria del grid
             Node node = grid.NodeFromWorldPoint(randomWalkablePosition);
 
-            Instantiate(gm.playerSpaceshipPrefab, randomWalkablePosition, Quaternion.identity);  //Instancia la nave en pantalla
+            GameObject unitObject = Instantiate(gm.playerSpaceshipPrefab, randomWalkablePosition, Quaternion.identity);  // Instancia la nave en pantalla
+            Unit myUnit = unitObject.GetComponent<Unit>();          // Obtén el componente Unit del objeto instanciado
+            if (myUnit != null) myUnit.ApplyInfluenceToGrid(grid);  // Aplicar influencia sobre el grid
+            
             node.walkable = false;
         }
     }

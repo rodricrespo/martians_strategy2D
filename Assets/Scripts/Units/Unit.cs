@@ -43,4 +43,31 @@ public class Unit : MonoBehaviour
         }
         else return;
     }
+
+    public void ApplyInfluenceToGrid(Grid grid)
+    {
+        // Obtener el nodo correspondiente a la posición de la unidad
+        Node unitNode = grid.NodeFromWorldPoint(transform.position);
+
+        // Resetear la influencia en el nodo y en los nodos vecinos
+        ResetInfluenceInGrid(grid);
+
+        // Establecer la influencia en el nodo y en los nodos vecinos
+        if (unitNode != null)
+        {
+            unitNode.influenceCost = 10f; // Valor de influencia 
+            foreach (Node neighbour in grid.GetNeighours(unitNode))
+            {
+                neighbour.influenceCost = 5f; // Valor de influencia en nodos vecinos
+            }
+        }
+    }
+
+    private void ResetInfluenceInGrid(Grid grid)
+    {
+        foreach (Node node in grid.grid)
+        {
+            node.influenceCost = 0f; // Resetear la influencia en todos los nodos
+        }
+    }
 }

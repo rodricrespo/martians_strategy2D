@@ -31,7 +31,6 @@ public class Pathfinding : MonoBehaviour
             Node currentNode = openSet.RemoveFirst();
             closedSet.Add(currentNode);
 
-            // pathing encontrado
             if (currentNode == targetNode)
             {
                 return RetracePath(startNode, currentNode);
@@ -42,8 +41,9 @@ public class Pathfinding : MonoBehaviour
                 if (neighbour.hasTree || !neighbour.walkable || closedSet.Contains(neighbour) || neighbour.hasUnit)
                     continue;
 
-                float newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour) - currentNode.influenceCost;
-                //if (newMovementCostToNeighbour < (neighbour.gCost + neighbour.tacticalCost) || !openSet.Contains(neighbour))
+                // Añadir la influencia al cálculo del nuevo costo de movimiento
+                float newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour) + neighbour.influenceCost;
+
                 if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))
                 {
                     neighbour.gCost = (int)newMovementCostToNeighbour;
@@ -56,7 +56,6 @@ public class Pathfinding : MonoBehaviour
             }
         }
 
-        // Si no encuentra pathing devuelve una lista vac�a
         return new List<Vector3>();
     }
 

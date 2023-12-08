@@ -57,10 +57,15 @@ public class Grid : MonoBehaviour
                 if (n.hasTree)
                     Gizmos.color = Color.green;
 
+                // Cambiar el color a azul si el nodo tiene influencia
+                if (n.influenceCost > 0)
+                    Gizmos.color = Color.blue;
+
                 Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - 0.1f));
             }
         }
     }
+
 
     public Node NodeFromWorldPoint(Vector3 worldPosition)   //Se usa para el pathfinding y al crear sprites <<--- NO CAMBIAR!!!
     { 
