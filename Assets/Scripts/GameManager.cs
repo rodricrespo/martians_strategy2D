@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class GameManager : MonoBehaviour
     public Grid grid;
     public Unit selectedUnit = null;
 
-    private List<Unit> enemyUnits = new List<Unit>();
+    private List<EnemyUnit> enemyUnits = new List<EnemyUnit>();
     
     void Start()
     {
@@ -33,13 +34,13 @@ public class GameManager : MonoBehaviour
     }
 
     public void EndTurn() {
-
         if (currentTurn == 1) {
             currentTurn = 2;
             StartCoroutine(AITurn());
         }
         else currentTurn = 1;
         UpdateResources();
+        ResetUnits();
     }
 
     public IEnumerator AITurn() //Las acciones que se tienen que hacer en el turno de la IA
@@ -47,9 +48,9 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(.1f);
 
         enemyUnits.Clear(); 
-        foreach (Unit unit in FindObjectsOfType<Unit>())    //Recorremos todos las unidades que sean del tipo Unit
+        foreach (EnemyUnit unit in FindObjectsOfType<EnemyUnit>())    
         {
-            enemyUnits.Add(unit); //Añadimos a la lista  
+            enemyUnits.Add(unit); //con esto peta
         }
 
         StartCoroutine(behaviourTree.RunBehavior(behaviourTree.planningRoot));
@@ -57,7 +58,7 @@ public class GameManager : MonoBehaviour
 
         StopAllCoroutines();
 
-        foreach (Unit unit in enemyUnits)
+        foreach (EnemyUnit unit in enemyUnits)
         {
             
             // HACER EL ARBOL DE LAS UNDIADES AQUI, O EN BehaviourTree
@@ -72,5 +73,13 @@ public class GameManager : MonoBehaviour
     public void UpdateResources() {
         playerResources += 5 * playerResourcesMultiplier;
         AIresources += 5 * AIresourcesMultiplier;
+    }
+
+    public void ResetUnits() {
+        Unit[] units = FindObjectsOfType<Unit>();
+        foreach (Unit unit in units) {
+            unit.isSelected = false;
+            //unit.hasMoved = false;
+        }
     }
 }

@@ -15,9 +15,9 @@ public class BuyHouse : BTNode
 
     public override Result Execute()
     {
+        Debug.Log("ENTRO EN BUY HOUSE");
         if (gm.AIresources < 100) return Result.Failure;
         else {
-            Debug.Log("SE COMPRA UNA CASA");
             gm.AIresourcesMultiplier = 2;
             gm.AIresources -= 100;
             return Result.Success;

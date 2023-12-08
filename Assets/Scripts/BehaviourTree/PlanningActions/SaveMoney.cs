@@ -18,7 +18,6 @@ public class SaveMoney : BTNode
     {
         if (gm.AIresources < 10) return Result.Failure;
         else {
-            Debug.Log("LA IA TIENE MÁS DE 10");
             return Result.Success;
         }
     }
