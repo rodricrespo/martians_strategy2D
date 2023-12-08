@@ -8,12 +8,20 @@ public class MapGenerator : MonoBehaviour
     public Sprite[] tiles;
     public float tileScaleFactor = 1.0f; // Para cambiar el tamaño de las tiles
     public GameObject plantPrefab;
+    public GameObject enemySpaceshipPrefab;
+    public GameObject playerSpaceshipPrefab;
+
+
     public int maxPlants = 10;
+    public int maxEnemySpaceships = 3;
+    public int maxPlayerSpaceships = 3;
 
     void Start()
     {
         GenerateMap();
         GeneratePlants();
+        GenerateEnemySpaceships();
+        GeneratePlayerSpaceships();
     }
 
     void GenerateMap()
@@ -36,7 +44,7 @@ public class MapGenerator : MonoBehaviour
         {
             Vector3 randomPosition = grid.GetRandomWalkablePosition();
             
-            if (randomPosition != Vector3.zero) // Asegúrate de que se haya encontrado una posición válida
+            if (randomPosition != Vector3.zero)
             {
                 Instantiate(plantPrefab, randomPosition, Quaternion.identity);
 
@@ -49,6 +57,45 @@ public class MapGenerator : MonoBehaviour
             }
         }
     }
+
+    void GenerateEnemySpaceships()
+    {
+        for (int i = 0; i < maxEnemySpaceships; i++)
+        {
+            Vector3 randomPosition = grid.GetRandomWalkablePosition();
+
+            if (randomPosition != Vector3.zero)
+            {
+                Instantiate(enemySpaceshipPrefab, randomPosition, Quaternion.identity);
+
+                Node node = grid.NodeFromWorldPoint(randomPosition);
+                if (node != null)
+                {
+                    node.walkable = false;
+                }
+            }
+        }
+    }
+
+    void GeneratePlayerSpaceships()
+    {
+        for (int i = 0; i < maxPlayerSpaceships; i++)
+        {
+            Vector3 randomPosition = grid.GetRandomWalkablePosition();
+
+            if (randomPosition != Vector3.zero)
+            {
+                Instantiate(playerSpaceshipPrefab, randomPosition, Quaternion.identity);
+
+                Node node = grid.NodeFromWorldPoint(randomPosition);
+                if (node != null)
+                {
+                    node.walkable = false;
+                }
+            }
+        }
+    }
+
 
     void CreateTile(int tileIndex, Vector2 position, float tileSize, float scaleFactor)
     {
