@@ -13,7 +13,9 @@ public class GameManager : MonoBehaviour
     public int currentTurn = 0;
     public BehaviourTree behaviourTree;
     public GameObject enemySpaceshipPrefab;
+    public GameObject playerSpaceshipPrefab;
     public Grid grid;
+    public Unit selectedUnit = null;
 
     private List<Unit> enemyUnits = new List<Unit>();
     
