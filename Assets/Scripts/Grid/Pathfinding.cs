@@ -88,4 +88,29 @@ public class Pathfinding : MonoBehaviour
 
         return 2000 * dstX + 10 * (dstY - dstX);
     }
+
+    public static IEnumerator MoveUnit(Unit unit, Vector3 targetPosition, float moveSpeed)
+    {
+        Node startNode = grid.NodeFromWorldPoint(unit.transform.position);
+        Node targetNode = grid.NodeFromWorldPoint(targetPosition);
+
+        if (startNode != null && targetNode != null)
+        {
+            List<Vector3> path = FindPath(unit.transform.position, targetPosition);
+
+            foreach (Vector3 waypoint in path)
+            {
+                while (Vector3.Distance(unit.transform.position, waypoint) > 0.1f)
+                {
+                    // Mueve gradualmente la unidad hacia el waypoint
+                    unit.transform.position = Vector3.MoveTowards(unit.transform.position, waypoint, Time.deltaTime * moveSpeed);
+                    yield return null;
+                }
+            }
+
+            // Reinicia el estado después de llegar al destino
+            unit.hasMoved = true;
+            unit.isSelected = false;
+        }
+    }
 }
