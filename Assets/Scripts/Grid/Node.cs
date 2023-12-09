@@ -6,7 +6,7 @@ public class Node : IHeapItem<Node>
 {
     public bool walkable;
     public bool hasUnit;
-    public bool hasTree;
+    public bool hasPlant;
     public Vector3 worldPosition;
     public int gridX;
     public int gridY;

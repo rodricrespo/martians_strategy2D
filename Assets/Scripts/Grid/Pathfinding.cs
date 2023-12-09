@@ -38,7 +38,7 @@ public class Pathfinding : MonoBehaviour
 
             foreach (Node neighbour in grid.GetNeighours(currentNode))
             {
-                if (neighbour.hasTree || !neighbour.walkable || closedSet.Contains(neighbour) || neighbour.hasUnit)
+                if (neighbour.hasPlant || !neighbour.walkable || closedSet.Contains(neighbour) || neighbour.hasUnit)
                     continue;
 
                 // Añadir la influencia al cálculo del nuevo costo de movimiento

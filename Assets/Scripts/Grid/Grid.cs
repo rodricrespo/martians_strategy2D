@@ -54,7 +54,7 @@ public class Grid : MonoBehaviour
                     Gizmos.color = Color.red;
                 if (n.hasUnit)
                     Gizmos.color = Color.blue;
-                if (n.hasTree)
+                if (n.hasPlant)
                     Gizmos.color = Color.green;
 
                 // Cambiar el color a azul si el nodo tiene influencia

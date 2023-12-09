@@ -16,6 +16,8 @@ public class MapGenerator : MonoBehaviour
     public int maxEnemySpaceships = 3;
     public int maxPlayerSpaceships = 3;
 
+    private Node node;
+
     void Start()
     {
         GenerateMap();
@@ -38,6 +40,28 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+    void CreateTile(int tileIndex, Vector2 position, float tileSize, float scaleFactor)
+    {
+        GameObject tileObject = new GameObject("Tile");
+        tileObject.transform.position = position;
+
+        node = Pathfinding.grid.NodeFromWorldPoint(tileObject.transform.position);
+        node.walkable = true;
+
+        SpriteRenderer tileRenderer = tileObject.AddComponent<SpriteRenderer>();
+        tileRenderer.sprite = tiles[tileIndex];
+
+        // Agregar el script Tile
+        Tiles tileScript = tileObject.AddComponent<Tiles>();
+
+        // Agregar Collider2D
+        Collider2D tileCollider = tileObject.AddComponent<BoxCollider2D>();
+
+        // Ajustar la escala del objeto directamente
+        tileObject.transform.localScale = new Vector3(scaleFactor, scaleFactor, 1.0f);
+        tileObject.transform.position = new Vector3(position.x, position.y, 0.01f);
+    }
+
     void GeneratePlants()
     {
         for (int i = 0; i < maxPlants; i++)
@@ -53,6 +77,7 @@ public class MapGenerator : MonoBehaviour
                 if (node != null)
                 {
                     node.walkable = false;
+                    node.hasPlant = true;
                 }
             }
         }
@@ -72,6 +97,7 @@ public class MapGenerator : MonoBehaviour
                 if (node != null)
                 {
                     node.walkable = false;
+                    node.hasUnit = true;
                 }
             }
         }
@@ -91,21 +117,9 @@ public class MapGenerator : MonoBehaviour
                 if (node != null)
                 {
                     node.walkable = false;
+                    node.hasUnit = true;
                 }
             }
         }
-    }
-
-
-    void CreateTile(int tileIndex, Vector2 position, float tileSize, float scaleFactor)
-    {
-        GameObject tileObject = new GameObject("Tile");
-        tileObject.transform.position = position;
-
-        SpriteRenderer tileRenderer = tileObject.AddComponent<SpriteRenderer>();
-        tileRenderer.sprite = tiles[tileIndex];
-
-        // Ajustar la escala del objeto directamente
-        tileObject.transform.localScale = new Vector3(scaleFactor, scaleFactor, 1.0f);
     }
 }

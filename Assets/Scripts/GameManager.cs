@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
         else currentTurn = 1;
         UpdateResources();
         ResetUnits();
+        ResetTiles();
     }
 
     public IEnumerator AITurn() //Las acciones que se tienen que hacer en el turno de la IA
@@ -80,6 +81,14 @@ public class GameManager : MonoBehaviour
         foreach (Unit unit in units) {
             unit.isSelected = false;
             //unit.hasMoved = false;
+        }
+    }
+
+    public void ResetTiles() {  
+        Tiles[] tiles = FindObjectsOfType<Tiles>();
+        foreach (Tiles tile in tiles)
+        {
+            tile.Reset();
         }
     }
 }

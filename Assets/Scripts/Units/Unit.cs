@@ -8,6 +8,7 @@ public class Unit : MonoBehaviour
     public bool hasMoved;
     public float moveSpeed = 5f;
 
+    private int unitRange = 0; 
     private GameManager gm;
     private GameObject gameLogicObject;
     private Grid grid;
@@ -25,40 +26,35 @@ public class Unit : MonoBehaviour
 
         isSelected = false;
         hasMoved = false;   //Resetearlo tras cambiar de turno
+
+        if(this.tag == "PlayerUnit1") unitRange = 3;
     }
 
     
      void Update()
     {
-        // Verificar clic derecho del mouse
-        if (Input.GetMouseButtonDown(1))
-        {
-            HandleRightClick();
-        }
+
     }
 
-private void HandleRightClick()
-{
-    if (isSelected && !hasMoved)
+    public void MoveUnit(Node targetNode)
     {
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Node targetNode = grid.NodeFromWorldPoint(mousePosition);
-
-        if (targetNode != null && targetNode.walkable)
+        if (isSelected && !hasMoved)
         {
-            Debug.Log("ENTRA");
-            MoveToNode(targetNode);
+            if (targetNode != null && targetNode.walkable)
+            {
+                Debug.Log("ENTRA");
+                MoveToNode(targetNode);
+            }
         }
     }
-}
     private void OnMouseDown() //selecciona o deselecciona unidad
     {
         if (gm.currentTurn == 1){
             if (!isSelected) {  //Selecciona
                 gm.selectedUnit = this;
                 isSelected = true;
-                Debug.Log(this.ToString() + " Seleccionado");
-                //if(this.tag == "`PlayerUnit1") GetWalkableTilesUnit1();  //FALTA IMPLEMENTAR
+                Debug.Log(this.ToString() + " selected");
+                if(this.tag == "PlayerUnit1") GetWalkableTiles();  //FALTA IMPLEMENTAR
             }
 
             else{   //Deselecciona
@@ -81,10 +77,10 @@ private void HandleRightClick()
         // Establecer la influencia en el nodo y en los nodos vecinos
         if (unitNode != null)
         {
-            unitNode.influenceCost = 10f; // Valor de influencia 
+            unitNode.influenceCost += 10f; // Valor de influencia 
             foreach (Node neighbour in grid.GetNeighours(unitNode))
             {
-                neighbour.influenceCost = 5f; // Valor de influencia en nodos vecinos
+                neighbour.influenceCost += 5f; // Valor de influencia en nodos vecinos
             }
         }
     }
@@ -114,6 +110,7 @@ private void HandleRightClick()
             }
 
             StartCoroutine(StartMovementCoroutine(targetNode));
+            gm.ResetTiles();
         }
     }
 
@@ -122,7 +119,7 @@ private void HandleRightClick()
         int steps = 0;
         Node lastNode = null;
 
-        while (path.Count > 0)
+        while (steps < unitRange && path.Count > 0)
         {
             transform.position = Vector3.MoveTowards(transform.position, path[0], moveSpeed * Time.deltaTime);
 
@@ -145,6 +142,23 @@ private void HandleRightClick()
         currentNode = lastNode;
         hasMoved = true;
         //GetEnemies();     //<- HACE FALTA IMPLEMENTARLA
+    }
+
+    void GetWalkableTiles()
+    {
+        if (hasMoved == true)
+        {
+            return;
+        }
+
+        Tiles[] tiles = FindObjectsOfType<Tiles>();
+        foreach (Tiles tile in tiles)
+        {
+            if (Mathf.Abs(transform.position.x - tile.transform.position.x) + Mathf.Abs(transform.position.y - tile.transform.position.y) <= unitRange + 0.5f)
+            {
+                if (tile.isClear() == true) tile.LightUp();
+            }
+        }
     }
 
 }

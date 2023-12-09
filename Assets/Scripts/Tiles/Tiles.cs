@@ -4,34 +4,50 @@ using UnityEngine;
 
 public class Tiles : MonoBehaviour
 {
+    public Node node;
+    public Color lightColor = Color.black;
+    public bool isWalkable;
+
+    private GameManager gm;
+    private GameObject gameLogicObject;
     private SpriteRenderer rend;
-    public Sprite[] tileGraphics;
-    public float hoverAmount;
-    public LayerMask obstacleLayer;
     private void Start()
     {
         rend = GetComponent<SpriteRenderer>();
-        int randTile = Random.Range(0, tileGraphics.Length);
-        rend.sprite = tileGraphics[randTile];
+
+        gameLogicObject = GameObject.Find("GameLogic");
+        gm = gameLogicObject.GetComponent<GameManager>();
+
+        node = Pathfinding.grid.NodeFromWorldPoint(transform.position);
+        isWalkable = false; // Se actualizará cuando se clicke en una undidad
     }
-    private void OnMouseEnter()
+
+    public bool isClear() //Si tiene obstaculo
     {
-        transform.localScale += Vector3.one * hoverAmount;
+        return node.walkable && !node.hasPlant;
     }
-    private void OnMouseExit()
-    {
-        transform.localScale -= Vector3.one * hoverAmount;
+    public void LightUp() {
+		
+        rend.color = lightColor;
+        isWalkable = true;
     }
-    public bool IsClear()
+
+    public void Reset()
     {
-        Collider2D obstacle = Physics2D.OverlapCircle(transform.position,0.2f,obstacleLayer);
-        if(obstacle != null)
+        rend.color = Color.white; //Se pone con su color normal
+        isWalkable = false;
+    }
+
+        private void OnMouseDown()
+    {
+        if (gm.currentTurn == 2) return; //No nos va a hacer falta
+
+        //Debug.Log(isWalkable);
+
+        if (gm.selectedUnit != null && isWalkable && node.walkable)
         {
-            return false;
-        }
-        else
-        {
-            return true;
+            gm.selectedUnit.MoveUnit(node);
         }
     }
+
 }
