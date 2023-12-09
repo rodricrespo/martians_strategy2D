@@ -135,6 +135,22 @@ public class Grid : MonoBehaviour
         return neighbours;
     }
 
+    public void UpdateNodesWithoutUnits()
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                if (grid[x, y].hasUnit)
+                {
+                    // Si el nodo tiene una unidad, actualizarlo
+                    grid[x, y].hasUnit = false;
+                    //grid[x, y].walkable = true;
+                }
+            }
+        }
+    }
+
 
 
 }

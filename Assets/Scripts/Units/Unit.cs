@@ -61,7 +61,7 @@ public class Unit : MonoBehaviour
                 if (this.tag!="EnemyUnit1"){
                     gm.selectedUnit = this;
                     isSelected = true;
-                    Debug.Log(this.ToString() + " selected");
+                    //Debug.Log(this.ToString() + " selected");
                     if(this.tag == "PlayerUnit1") GetWalkableTiles(); 
                 }
             }
@@ -70,7 +70,7 @@ public class Unit : MonoBehaviour
                 gm.selectedUnit = null;
                 gm.ResetTiles();
                 isSelected = false;
-                Debug.Log(this.ToString() + " Deseeleccionado");
+                //Debug.Log(this.ToString() + " Deseeleccionado");
             }
         }
         else return;
@@ -110,10 +110,9 @@ public class Unit : MonoBehaviour
         if (this.tag == "EnemyUnit1") path = Pathfinding.FindEnemyPath(transform.position, targetNode.worldPosition);
         else path = Pathfinding.FindPath(transform.position, targetNode.worldPosition);
 
-        Node lastNode = null;
         if (path.Count > 0)
         {
-            int steps = 0;
+            currentNode = Pathfinding.grid.NodeFromWorldPoint(transform.position);
             if (currentNode != null)
             {
                 currentNode.walkable = true;

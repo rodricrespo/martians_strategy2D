@@ -64,13 +64,6 @@ public class Pathfinding : MonoBehaviour
         Node startNode = grid.NodeFromWorldPoint(startPos);
         Node targetNode = grid.NodeFromWorldPoint(targetPos);
 
-        // Comprobar si el enemigo ya está a una distancia de un nodo del objetivo
-        if (Vector3.Distance(startPos, targetPos) <= grid.nodeRadius * 2f)
-        {
-            // El enemigo ya está lo suficientemente cerca, no es necesario moverse
-            return new List<Vector3>();
-        }
-
         Heap<Node> openSet = new Heap<Node>(grid.maxSize);
         HashSet<Node> closedSet = new HashSet<Node>();
 
@@ -81,9 +74,8 @@ public class Pathfinding : MonoBehaviour
             Node currentNode = openSet.RemoveFirst();
             closedSet.Add(currentNode);
 
-            if (currentNode.walkable && !currentNode.hasPlant && !currentNode.hasUnit)
+            if (currentNode == targetNode)
             {
-                // Retorna la ruta hasta este punto si es alcanzable
                 return RetracePath(startNode, currentNode);
             }
 
@@ -106,7 +98,53 @@ public class Pathfinding : MonoBehaviour
             }
         }
 
+        // Si no se encontró un camino directo, intentar encontrar un nodo vecino o el más cercano --> Esto en verdad no se debe de usar aqui ya que si no hay enemigos cerca, no se va a realizar esta funcion
+        List<Vector3> fallbackPath = FindNearestPath(startNode, targetNode);
+
+        return fallbackPath;
+    }
+
+    private static List<Vector3> FindNearestPath(Node startNode, Node targetNode)
+    {
+        // Buscar un nodo vecino del objetivo
+        foreach (Node neighbour in grid.GetNeighours(targetNode))
+        {
+            if (!neighbour.hasPlant && neighbour.walkable && !neighbour.hasUnit)
+            {
+                // Se encontró un nodo vecino, retornar la ruta hasta ese nodo
+                return RetracePath(startNode, neighbour);
+            }
+        }
+
+        // Si no se encontró un nodo vecino, buscar el nodo más cercano al objetivo
+        Node nearestNode = GetNearestNode(targetNode);
+
+        // Si se encontró un nodo cercano, retornar la ruta hasta ese nodo
+        if (nearestNode != null)
+        {
+            return RetracePath(startNode, nearestNode);
+        }
+
+        // Si no se encontró ningún nodo cercano, retornar una lista vacía
         return new List<Vector3>();
+    }
+
+    private static Node GetNearestNode(Node targetNode)
+    {
+        Node nearestNode = null;
+        int nearestDistance = int.MaxValue;
+
+        foreach (Node node in grid.grid)
+        {
+            int distance = GetDistance(node, targetNode);
+            if (distance < nearestDistance && !node.hasPlant && node.walkable && !node.hasUnit)
+            {
+                nearestNode = node;
+                nearestDistance = distance;
+            }
+        }
+
+        return nearestNode;
     }
 
     public static List<Vector3> RetracePath(Node startNode, Node endNode)
