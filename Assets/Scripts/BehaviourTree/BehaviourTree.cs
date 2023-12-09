@@ -5,7 +5,8 @@ using UnityEngine;
 public class BehaviourTree : MonoBehaviour
 {
     [HideInInspector]public BTNode planningRoot; //Nos da el árbol para plantear estrategias
-    private BTNode unitRoot;    //Nos da el árbol para unidades
+    [HideInInspector]public BTNode unitRoot;    //Nos da el árbol para unidades
+    
 
     //Puede haber más árboles...
 
@@ -15,7 +16,6 @@ public class BehaviourTree : MonoBehaviour
     {
         InitializeBlackboard(); //Para usar datos dentro del árbol
         CreatePlanningRoot();
-        // CreateUnitRoot(); 
     }
 
     public IEnumerator RunBehavior(BTNode root)
@@ -42,12 +42,14 @@ public class BehaviourTree : MonoBehaviour
                                                        new Repeater(this, new Selector(this, new BTNode[] { 
                                                                                                             new BuySoldier(this),
                                                                                                             new BuyHouse(this)
-                                                                                                          })) 
+                                                                                                          }
+                                                                                      )
+                                                                    ) 
                                                      }
                                  )
         );
 
         planningRoot = planningTree;
-    }
+    }  
 
 }

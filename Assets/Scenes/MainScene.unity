@@ -330,6 +330,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   planningRoot: {fileID: 0}
+  unitRoot: {fileID: 0}
 --- !u!114 &163019442
 MonoBehaviour:
   m_ObjectHideFlags: 0
