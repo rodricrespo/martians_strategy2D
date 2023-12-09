@@ -9,6 +9,8 @@ public class Unit : MonoBehaviour
     public float moveSpeed = 5f;
     public BTNode unitRoot;
     public int unitRange = 3; 
+    public int health = 10;
+    public int maxHealth = 10;
 
     private GameManager gm;
     private GameObject gameLogicObject;
@@ -17,6 +19,7 @@ public class Unit : MonoBehaviour
     private Node currentNode;
     private List<Vector3> path;
     private BehaviourTree bt;
+    private Healthbar healthbar;
 
     void Start()
     {
@@ -36,12 +39,15 @@ public class Unit : MonoBehaviour
         }
 
         if(this.tag == "PlayerUnit1") unitRange = 3;
+
+        // Encuentra el Healthbar como nieto del objeto Unit
+        healthbar = GetComponentInChildren<Healthbar>();
     }
 
     
-     void Update()
+    void Update()
     {
-        
+        healthbar.UpdateHealthbar(health, maxHealth);
     }
 
     public void MoveUnit(Node targetNode)
