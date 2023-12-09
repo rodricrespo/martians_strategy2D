@@ -881,6 +881,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1443412227, guid: 0b8a81542e74e554b8843f3bc9ca9242, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1443412227, guid: 0b8a81542e74e554b8843f3bc9ca9242, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1568161208750034714, guid: 0b8a81542e74e554b8843f3bc9ca9242, type: 3}
       propertyPath: m_Name
       value: playerSpaceship
@@ -1003,6 +1011,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4753465554857933629, guid: b9df03609d85ac7489da61c69e09134a, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4753465554857933629, guid: b9df03609d85ac7489da61c69e09134a, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5564129269754277272, guid: b9df03609d85ac7489da61c69e09134a, type: 3}
       propertyPath: m_Name
       value: enemySpaceship

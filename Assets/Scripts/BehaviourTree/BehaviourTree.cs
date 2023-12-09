@@ -10,7 +10,7 @@ public class BehaviourTree : MonoBehaviour
 
     //Puede haber más árboles...
 
-    public Dictionary<string, object> Blackboard { get; set; }
+    public Dictionary<string, Unit> Blackboard { get; set; }
 
     void Awake()
     {
@@ -31,7 +31,7 @@ public class BehaviourTree : MonoBehaviour
 
     private void InitializeBlackboard()
     {
-        Blackboard = new Dictionary<string, object>();
+        Blackboard = new Dictionary<string, Unit>();
     }
 
     private void CreatePlanningRoot()

@@ -11,6 +11,7 @@ public class Unit : MonoBehaviour
     public int unitRange = 3; 
     public int health = 10;
     public int maxHealth = 10;
+    public int attackPower = 5;
 
     private GameManager gm;
     private GameObject gameLogicObject;
@@ -36,9 +37,13 @@ public class Unit : MonoBehaviour
         if (this.tag == "EnemyUnit1") {
             unitRoot = bt.unitRoot;
             unitRange = 3;
+            attackPower = 5;
         }
 
-        if(this.tag == "PlayerUnit1") unitRange = 3;
+        if(this.tag == "PlayerUnit1") {
+            unitRange = 3;
+            attackPower = 5;
+        }
 
         // Encuentra el Healthbar como nieto del objeto Unit
         healthbar = GetComponentInChildren<Healthbar>();
@@ -157,7 +162,6 @@ public class Unit : MonoBehaviour
 
         currentNode = lastNode;
         hasMoved = true;
-        //GetEnemies();     //<- HACE FALTA IMPLEMENTARLA
     }
 
     void GetWalkableTiles()
@@ -175,6 +179,26 @@ public class Unit : MonoBehaviour
                 if (tile.isClear() == true) tile.LightUp();
             }
         }
+    }
+    public void CheckDeath()
+    {
+        if (health <= 0) {
+            //Actualizar nodo
+            Node deathNode = Pathfinding.grid.NodeFromWorldPoint(transform.position);
+            if (deathNode != null)
+            {
+                deathNode.walkable = true;
+                deathNode.hasUnit = false;
+            }
+
+            StartCoroutine(DestroyAfterDelay(0.1f));
+        }
+    }
+
+    private IEnumerator DestroyAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Destroy(gameObject);
     }
 
 }

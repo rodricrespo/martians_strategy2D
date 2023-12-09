@@ -30,6 +30,10 @@ public class GameManager : MonoBehaviour
         if (currentTurn == 2) return;
 
         if (Input.GetKeyDown(KeyCode.Space)) EndTurn();
+
+        foreach (Unit unit in FindObjectsOfType<Unit>()) {
+            unit.CheckDeath();
+        }
     }
 
     public void EndTurn() {
@@ -58,8 +62,8 @@ public class GameManager : MonoBehaviour
                     behaviourTree, new Selector( behaviourTree, new  BTNode[] { 
                                                                                 new Repeater( behaviourTree, new Sequencer (behaviourTree, new BTNode[] {
                                                                                                                                             new CheckEnemiesInRange(behaviourTree, enemyUnit),
-                                                                                                                                            new MoveEnemy(behaviourTree, enemyUnit, grid)
-                                                                                                                                            //new Attack(behaviourTree, enemyUnit)
+                                                                                                                                            new MoveEnemy(behaviourTree, enemyUnit, grid),
+                                                                                                                                            new Attack(behaviourTree, enemyUnit)
                                                                                                                                         }
                                                                                                             )
                                                             

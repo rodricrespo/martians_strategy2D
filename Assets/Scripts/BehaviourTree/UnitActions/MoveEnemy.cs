@@ -21,25 +21,19 @@ public class MoveEnemy : BTNode
     public override Result Execute()
     {
         // Obtener la información del enemigo del Blackboard
-        string enemyName = (string)behaviourTree.Blackboard["enemyName"];
-        Vector3 enemyPosition = (Vector3)behaviourTree.Blackboard["enemyPosition"];
-
-        Debug.Log($"Info del target: {enemyName}, {enemyPosition}");
+        Unit enemyUnit = (Unit)behaviourTree.Blackboard["enemyUnit"];
 
         //obtener el target node y moverse
-        Node targetNode = grid.NodeFromWorldPoint(enemyPosition);
+        Node targetNode = grid.NodeFromWorldPoint(enemyUnit.transform.position);
 
         // Verificar si se encontró un nodo válido
         if (targetNode != null)
         {
             // Mover la unidad hacia el nodo más cercano
             unit.MoveToNode(targetNode);
-            return Result.Success; // Puedes considerar esto como un éxito si el movimiento se realiza correctamente
+            return Result.Success;
         }
-        else
-        {
-            Debug.Log("NO LLEGA PELOTUDO");
-            return Result.Failure; // Manejar el caso donde no se encontró un nodo válido (puede ser un manejo de error)
-        }
+        else return Result.Failure;
+        
     }
 }
