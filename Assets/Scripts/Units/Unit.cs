@@ -7,19 +7,22 @@ public class Unit : MonoBehaviour
     public bool isSelected;
     public bool hasMoved;
     public float moveSpeed = 5f;
+    public BTNode unitRoot;
+    public int unitRange = 3; 
 
-    private int unitRange = 0; 
     private GameManager gm;
     private GameObject gameLogicObject;
     private Grid grid;
     private GameObject pGrid;
     private Node currentNode;
     private List<Vector3> path;
+    private BehaviourTree bt;
 
     void Start()
     {
         gameLogicObject = GameObject.Find("GameLogic");
         gm = gameLogicObject.GetComponent<GameManager>();
+        bt = gameLogicObject.GetComponent<BehaviourTree>();
 
         pGrid = GameObject.Find("PGrid");
         grid = pGrid.GetComponent<Grid>();
@@ -27,13 +30,18 @@ public class Unit : MonoBehaviour
         isSelected = false;
         hasMoved = false;   //Resetearlo tras cambiar de turno
 
+        if (this.tag == "EnemyUnit1") {
+            unitRoot = bt.unitRoot;
+            unitRange = 3;
+        }
+
         if(this.tag == "PlayerUnit1") unitRange = 3;
     }
 
     
      void Update()
     {
-
+        
     }
 
     public void MoveUnit(Node targetNode)
@@ -42,7 +50,6 @@ public class Unit : MonoBehaviour
         {
             if (targetNode != null && targetNode.walkable)
             {
-                Debug.Log("ENTRA");
                 MoveToNode(targetNode);
             }
         }
@@ -51,14 +58,17 @@ public class Unit : MonoBehaviour
     {
         if (gm.currentTurn == 1){
             if (!isSelected) {  //Selecciona
-                gm.selectedUnit = this;
-                isSelected = true;
-                Debug.Log(this.ToString() + " selected");
-                if(this.tag == "PlayerUnit1") GetWalkableTiles();  //FALTA IMPLEMENTAR
+                if (this.tag!="EnemyUnit1"){
+                    gm.selectedUnit = this;
+                    isSelected = true;
+                    Debug.Log(this.ToString() + " selected");
+                    if(this.tag == "PlayerUnit1") GetWalkableTiles(); 
+                }
             }
 
             else{   //Deselecciona
                 gm.selectedUnit = null;
+                gm.ResetTiles();
                 isSelected = false;
                 Debug.Log(this.ToString() + " Deseeleccionado");
             }
@@ -94,10 +104,11 @@ public class Unit : MonoBehaviour
     }
 
     
-    private void MoveToNode(Node targetNode)
+    public void MoveToNode(Node targetNode)
     {
         // Obtener la ruta utilizando el algoritmo de pathfinding
-        path = Pathfinding.FindPath(transform.position, targetNode.worldPosition);
+        if (this.tag == "EnemyUnit1") path = Pathfinding.FindEnemyPath(transform.position, targetNode.worldPosition);
+        else path = Pathfinding.FindPath(transform.position, targetNode.worldPosition);
 
         Node lastNode = null;
         if (path.Count > 0)

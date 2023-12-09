@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class CheckEnemiesInRange : BTNode
 {
-    private EnemyUnit unit;
+    private Unit unit;
+    private BehaviourTree behaviourTree;
 
-    public CheckEnemiesInRange(BehaviourTree t, EnemyUnit _unit) : base(t)
+    public CheckEnemiesInRange(BehaviourTree t, Unit _unit) : base(t)
     {
         unit = _unit;
+        behaviourTree = t;
     }
 
     public override Result Execute()
@@ -18,9 +20,14 @@ public class CheckEnemiesInRange : BTNode
         foreach (Unit otherUnit in allUnits)
         {
             // Verificar si la unidad es del jugador y está dentro del rango del enemigo
-            if (otherUnit.tag == "PlayerUnit1" && IsWithinRange(otherUnit.transform.position, unit.transform.position, unit.enemyUnitRange))
+            if (otherUnit.tag == "PlayerUnit1" && IsWithinRange(otherUnit.transform.position, unit.transform.position, unit.unitRange))
             {
                 Debug.Log("Unidad del jugador dentro del rango.");
+
+                // Almacenar la información del enemigo en el Blackboard
+                behaviourTree.Blackboard["enemyName"] = otherUnit.name;
+                behaviourTree.Blackboard["enemyPosition"] = otherUnit.transform.position;
+
                 return Result.Success;
             }
         }

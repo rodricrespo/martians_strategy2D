@@ -31,8 +31,7 @@ public class BehaviourTree : MonoBehaviour
 
     private void InitializeBlackboard()
     {
-        //Blackboard = new Dictionary<string, object>();
-        //Blackboard.Add("wb", new Rect(0, 0, 0, 0));
+        Blackboard = new Dictionary<string, object>();
     }
 
     private void CreatePlanningRoot()

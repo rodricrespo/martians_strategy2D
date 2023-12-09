@@ -59,6 +59,56 @@ public class Pathfinding : MonoBehaviour
         return new List<Vector3>();
     }
 
+    public static List<Vector3> FindEnemyPath(Vector3 startPos, Vector3 targetPos)
+    {
+        Node startNode = grid.NodeFromWorldPoint(startPos);
+        Node targetNode = grid.NodeFromWorldPoint(targetPos);
+
+        // Comprobar si el enemigo ya está a una distancia de un nodo del objetivo
+        if (Vector3.Distance(startPos, targetPos) <= grid.nodeRadius * 2f)
+        {
+            // El enemigo ya está lo suficientemente cerca, no es necesario moverse
+            return new List<Vector3>();
+        }
+
+        Heap<Node> openSet = new Heap<Node>(grid.maxSize);
+        HashSet<Node> closedSet = new HashSet<Node>();
+
+        openSet.Add(startNode);
+
+        while (openSet.Count > 0)
+        {
+            Node currentNode = openSet.RemoveFirst();
+            closedSet.Add(currentNode);
+
+            if (currentNode.walkable && !currentNode.hasPlant && !currentNode.hasUnit)
+            {
+                // Retorna la ruta hasta este punto si es alcanzable
+                return RetracePath(startNode, currentNode);
+            }
+
+            foreach (Node neighbour in grid.GetNeighours(currentNode))
+            {
+                if (neighbour.hasPlant || !neighbour.walkable || closedSet.Contains(neighbour) || neighbour.hasUnit)
+                    continue;
+
+                float newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour) + neighbour.influenceCost;
+
+                if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))
+                {
+                    neighbour.gCost = (int)newMovementCostToNeighbour;
+                    neighbour.hCost = GetDistance(neighbour, targetNode);
+                    neighbour.parent = currentNode;
+
+                    if (!openSet.Contains(neighbour))
+                        openSet.Add(neighbour);
+                }
+            }
+        }
+
+        return new List<Vector3>();
+    }
+
     public static List<Vector3> RetracePath(Node startNode, Node endNode)
     {
         List<Vector3> path = new List<Vector3>();

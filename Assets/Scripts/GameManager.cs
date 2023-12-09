@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public GameObject playerSpaceshipPrefab;
     public Grid grid;
     public Unit selectedUnit = null;
+    public Pathfinding pathfinding;
     
     void Start()
     {
@@ -49,26 +50,28 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(.5f);   //Esperamos un determinado tiempo y luego vamos con las unidades
         StopCoroutine(behaviourTree.RunBehavior(behaviourTree.planningRoot));
 
-        foreach (EnemyUnit enemyUnit in FindObjectsOfType<EnemyUnit>()) //No se puede hacer antes porque tenemos que hacer lo del AI planning
+        foreach (Unit enemyUnit in FindObjectsOfType<Unit>()) //No se puede hacer antes porque tenemos que hacer lo del AI planning
         {
-            //saber la estrategia del enemigo (neutral, defensiva, agresiva) y luego generar el árbol en consecuencia
-            enemyUnit.unitRoot = new Repeater(
-                behaviourTree, new Selector( behaviourTree, new  BTNode[] { 
-                                                                            new Repeater( behaviourTree, new Sequencer (behaviourTree, new BTNode[] {
-                                                                                                                                        new CheckEnemiesInRange(behaviourTree, enemyUnit)
-                                                                                                                                        //new MoveEnemy(behaviourTree, enemyUnit),
-                                                                                                                                        //new Attack(behaviourTree, enemyUnit)
-                                                                                                                                    }
-                                                                                                        )
-                                                        
-                                                                                    ) 
-                                                                            }      
-                                            )
-            );
+            if (enemyUnit.tag == "EnemyUnit1"){
+                //saber la estrategia del enemigo (neutral, defensiva, agresiva) y luego generar el árbol en consecuencia
+                enemyUnit.unitRoot = new Repeater(
+                    behaviourTree, new Selector( behaviourTree, new  BTNode[] { 
+                                                                                new Repeater( behaviourTree, new Sequencer (behaviourTree, new BTNode[] {
+                                                                                                                                            new CheckEnemiesInRange(behaviourTree, enemyUnit),
+                                                                                                                                            new MoveEnemy(behaviourTree, enemyUnit, grid)
+                                                                                                                                            //new Attack(behaviourTree, enemyUnit)
+                                                                                                                                        }
+                                                                                                            )
+                                                            
+                                                                                        ) 
+                                                                                }      
+                                                )
+                );
 
-            StartCoroutine(behaviourTree.RunBehavior(enemyUnit.unitRoot));
-            
-            yield return new WaitForSeconds(1.75f);
+                StartCoroutine(behaviourTree.RunBehavior(enemyUnit.unitRoot));
+                
+                yield return new WaitForSeconds(1.75f);
+            }
         }
 
         EndTurn();
@@ -85,12 +88,6 @@ public class GameManager : MonoBehaviour
             unit.isSelected = false;
             unit.hasMoved = false;
         }
-
-        EnemyUnit[] enUnits = FindObjectsOfType<EnemyUnit>();
-        foreach (EnemyUnit enUnit in enUnits) {
-            enUnit.hasMoved = false;
-        }
-
     }
 
     public void ResetTiles() {  
@@ -100,4 +97,6 @@ public class GameManager : MonoBehaviour
             tile.Reset();
         }
     }
+
+    
 }

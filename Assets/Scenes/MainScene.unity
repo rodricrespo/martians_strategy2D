@@ -317,6 +317,7 @@ MonoBehaviour:
   playerSpaceshipPrefab: {fileID: 1568161208750034714, guid: 0b8a81542e74e554b8843f3bc9ca9242, type: 3}
   grid: {fileID: 502983506}
   selectedUnit: {fileID: 0}
+  pathfinding: {fileID: 0}
 --- !u!114 &163019441
 MonoBehaviour:
   m_ObjectHideFlags: 0
