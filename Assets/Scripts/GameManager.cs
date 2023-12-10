@@ -60,19 +60,23 @@ public class GameManager : MonoBehaviour
         {
             if (enemyUnit.tag == "EnemyUnit1"){
                 //saber la estrategia del enemigo (neutral, defensiva, agresiva) y luego generar el árbol en consecuencia
-                enemyUnit.unitRoot = new Repeater(
-                    behaviourTree, new Selector( behaviourTree, new  BTNode[] { 
-                                                                                new Repeater( behaviourTree, new Sequencer (behaviourTree, new BTNode[] {
-                                                                                                                                            new CheckEnemiesInRange(behaviourTree, enemyUnit),
-                                                                                                                                            new MoveEnemy(behaviourTree, enemyUnit, grid),
-                                                                                                                                            new Attack(behaviourTree, enemyUnit)
-                                                                                                                                        }
-                                                                                                            )
+                enemyUnit.unitRoot = 
+                    new Selector( behaviourTree, new  BTNode[] { 
+                                                                 new Sequencer (behaviourTree, new BTNode[] {
+                                                                                                                new CheckEnemiesInRange(behaviourTree, enemyUnit),
+                                                                                                                new MoveEnemy(behaviourTree, enemyUnit, grid),
+                                                                                                                new Attack(behaviourTree, enemyUnit)
+                                                                                                            }
+                                                                               ),
+                                                                new Sequencer (behaviourTree, new BTNode[] {
+                                                                                                                new MoveEnemy(behaviourTree, enemyUnit, grid) //A una posición cercana al enemigo
+                                                                                                            }
+                                                                
+                                                                              )
                                                             
-                                                                                        ) 
-                                                                                }      
-                                                )
-                );
+                                                                                         
+                                                               }      
+                                );
 
                 StartCoroutine(behaviourTree.RunBehavior(enemyUnit.unitRoot));
                 

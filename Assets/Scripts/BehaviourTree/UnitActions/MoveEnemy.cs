@@ -18,22 +18,33 @@ public class MoveEnemy : BTNode
         grid = g;
     }
 
-    public override Result Execute()
+     public override Result Execute()
     {
-        // Obtener la información del enemigo del Blackboard
-        Unit enemyUnit = (Unit)behaviourTree.Blackboard["enemyUnit"];
-
-        //obtener el target node y moverse
-        Node targetNode = grid.NodeFromWorldPoint(enemyUnit.transform.position);
-
-        // Verificar si se encontró un nodo válido
-        if (targetNode != null)
+        // Verificar si 'enemyUnit' está presente en el Blackboard y es de tipo Unit
+        if (behaviourTree.Blackboard.TryGetValue("enemyUnit", out Unit enemyUnit))
         {
-            // Mover la unidad hacia el nodo más cercano
-            unit.MoveToNode(targetNode);
-            return Result.Success;
+            Node targetNode = grid.NodeFromWorldPoint(enemyUnit.transform.position);
+
+            if (targetNode != null)
+            {
+                unit.MoveToNode(targetNode);
+                return Result.Success;
+            }
+            else return Result.Failure; // Manejo de error si no se encuentra un nodo válido
         }
-        else return Result.Failure;
-        
+
+        else
+        {
+            // La clave 'enemyUnit' no está presente en el Blackboard
+            Vector3 randomPosition = grid.GetRandomWalkablePosition();
+            if (randomPosition != Vector3.zero)
+            {
+                Node randomNode = grid.NodeFromWorldPoint(randomPosition);
+                unit.MoveToNode(randomNode);
+                return Result.Success;
+            }
+            else return Result.Failure; 
+            
+        }
     }
 }
