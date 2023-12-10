@@ -15,18 +15,13 @@ public class CheckDefensiveStrategy : BTNode
 
     public override Result Execute()
     {
-        Debug.Log("Diferencia de unidades");
-        Debug.Log((gm.GetUnitCountWithTag("PlayerUnit1") + gm.GetUnitCountWithTag("PlayerUnit2")) - (gm.GetUnitCountWithTag("EnemyUnit1") + gm.GetUnitCountWithTag("EnemyUnit2")));
-
-        Debug.Log("Diferencia de recursos");
-        Debug.Log(gm.playerResources - gm.AIresources);
         //INFERIORIDAD NUMÉRICA (QUE HAYA UNA DIFERENCIA SIGNIFICATIVA, POR LO MENOS 2 UNIDADES)
         if ( (gm.GetUnitCountWithTag("PlayerUnit1") + gm.GetUnitCountWithTag("PlayerUnit2")) - (gm.GetUnitCountWithTag("EnemyUnit1") + gm.GetUnitCountWithTag("EnemyUnit2")) > 2 ) {
             gm.currentEnemyStrategy = GameManager.Strategy.Defensive;
             return Result.Success;
         }
         //BAJA CANTIDAD DE RECURSOS 
-        if(gm.playerResources - gm.AIresources >= 30) {
+        if(gm.playerResources - gm.AIresources >= 25) {
             gm.currentEnemyStrategy = GameManager.Strategy.Defensive;
             return Result.Success;
         }
@@ -35,6 +30,7 @@ public class CheckDefensiveStrategy : BTNode
             gm.currentEnemyStrategy = GameManager.Strategy.Defensive;
             return Result.Success;
         }
+
         return Result.Failure; 
              
     }

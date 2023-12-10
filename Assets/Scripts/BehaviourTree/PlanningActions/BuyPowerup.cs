@@ -18,9 +18,9 @@ public class BuyPowerup : BTNode
         //Debug.Log("ENTRO EN BUY POWERUP");
         if (gm.AIresources < 50) return Result.Failure;
         else {
-            //SetAttackPowerup();   //Si está en estrategia agresiva
-            //SetLockPowerup();     //Para estategia defensiva
-            SetResourcesPowerup();
+            if (gm.currentEnemyStrategy == GameManager.Strategy.Aggressive) SetAttackPowerup();  //Si está en estrategia agresiva
+            if (gm.currentEnemyStrategy == GameManager.Strategy.Defensive) SetLockPowerup();     //Para estategia defensiva
+            if (gm.currentEnemyStrategy == GameManager.Strategy.Normal) SetResourcesPowerup();
             gm.AIresources -= 50;
             return Result.Success;
         }

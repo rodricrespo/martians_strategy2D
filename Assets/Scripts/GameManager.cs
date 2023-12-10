@@ -72,15 +72,12 @@ public class GameManager : MonoBehaviour
     {
 
         //1. DECIDIR ESTARTEGIA
-        //2. PLANIFICAR UNIDADES
-        //3. MOVER UNIDADES
 
         behaviourTree.strategyRoot = new Repeater ( 
                                         behaviourTree, new Selector (behaviourTree, new BTNode[] {  
-                                                                                            //new CheckAgressiveStrategy(this),
+                                                                                            new CheckAgressiveStrategy(behaviourTree, this),
                                                                                             new CheckDefensiveStrategy(behaviourTree, this),
                                                                                             new CheckNormalStrategy(behaviourTree, this),
-                                                                                
                                                                                         }
                                                                    )
                                     );
@@ -92,10 +89,14 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(.5f);   
         StopCoroutine(behaviourTree.RunBehavior(behaviourTree.strategyRoot));
 
+
+        //2. PLANIFICAR UNIDADES
         StartCoroutine(behaviourTree.RunBehavior(behaviourTree.planningRoot));
         yield return new WaitForSeconds(.5f);   
         StopCoroutine(behaviourTree.RunBehavior(behaviourTree.planningRoot));
 
+
+        //3. MOVER UNIDADES
         foreach (Unit enemyUnit in FindObjectsOfType<Unit>()) //No se puede hacer antes porque tenemos que hacer lo del AI planning
         {
             if (enemyUnit.tag == "EnemyUnit1" || enemyUnit.tag == "EnemyUnit2"){

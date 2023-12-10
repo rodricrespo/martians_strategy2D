@@ -287,5 +287,6 @@ public class Unit : MonoBehaviour
 
     public void AttackEnemyUnit(Unit enemyUnit){    //Lo usa el Player
         enemyUnit.health -= this.attackPower * gm.playerPowerMultiplier;
+        canAttack = false;
     }
 }
