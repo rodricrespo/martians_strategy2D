@@ -5,7 +5,7 @@ using UnityEngine;
 public class Tiles : MonoBehaviour
 {
     public Node node;
-    public Color lightColor = Color.black;
+    public Color lightColor = Color.magenta;
     public bool isWalkable;
 
     private GameManager gm;
@@ -20,6 +20,7 @@ public class Tiles : MonoBehaviour
 
         node = Pathfinding.grid.NodeFromWorldPoint(transform.position);
         isWalkable = false; // Se actualizará cuando se clicke en una undidad
+        rend.color = Color.cyan;
     }
 
     public bool isClear() //Si tiene obstaculo
@@ -34,7 +35,7 @@ public class Tiles : MonoBehaviour
 
     public void Reset()
     {
-        rend.color = Color.white; //Se pone con su color normal
+        rend.color = Color.cyan; //Se pone con su color normal
         isWalkable = false;
     }
 
