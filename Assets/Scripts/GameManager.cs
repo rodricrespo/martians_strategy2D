@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         currentTurn = 1;
+        UpdateNodesWithUnits(); //Primera pasada para determinar si hay nodos vecinos con unidades enemigas
     }
 
     
@@ -44,6 +45,7 @@ public class GameManager : MonoBehaviour
         }
         else currentTurn = 1;
         UpdateResources();
+        UpdateNodesWithUnits();
         ResetUnits();
         ResetTiles();
     }
@@ -101,6 +103,40 @@ public class GameManager : MonoBehaviour
             tile.Reset();
         }
     }
+
+    public void UpdateNodesWithUnits()
+    {
+        Node[,] gridNodes = grid.grid;
+
+        for (int x = 0; x < grid.gridSizeX; x++)
+        {
+            for (int y = 0; y < grid.gridSizeY; y++)
+            {
+                Node node = gridNodes[x, y];
+
+                // Verifica si hay una unidad en el nodo
+                Unit unitInNode = FindUnitInNode(node);
+                node.unit = unitInNode;
+            }
+        }
+    }
+
+    private Unit FindUnitInNode(Node node)
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(node.worldPosition, grid.nodeRadius);
+
+        foreach (var collider in colliders)
+        {
+            Unit unit = collider.GetComponent<Unit>();
+            if (unit != null)
+            {
+                return unit;
+            }
+        }
+
+        return null;
+    }
+
 
     
 }
