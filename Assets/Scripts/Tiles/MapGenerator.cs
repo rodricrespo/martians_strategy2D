@@ -11,6 +11,8 @@ public class MapGenerator : MonoBehaviour
     public GameObject enemySpaceshipPrefab;
     public GameObject enemySpaceshipPrefab2;
     public GameObject playerSpaceshipPrefab;
+    public GameObject playerSpaceshipPrefab2;
+
 
 
     public int maxPlants = 10;
@@ -132,6 +134,19 @@ public class MapGenerator : MonoBehaviour
                     node.walkable = false;
                     node.hasUnit = true;
                 }
+            }
+        }
+
+        Vector3 randomPosition2 = grid.GetRandomWalkablePositionInHalf(grid.gridWorldSize.x / 4); // Mitad drch
+        if (randomPosition2 != Vector3.zero)
+        {
+            Instantiate(playerSpaceshipPrefab2, randomPosition2, Quaternion.identity);
+
+            Node node = grid.NodeFromWorldPoint(randomPosition2);
+            if (node != null)
+            {
+                    node.walkable = false;
+                    node.hasUnit = true;
             }
         }
     }

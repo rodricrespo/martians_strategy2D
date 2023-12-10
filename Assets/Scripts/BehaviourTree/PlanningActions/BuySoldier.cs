@@ -24,7 +24,7 @@ public class BuySoldier : BTNode
             return Result.Failure;
         }
         else {
-            if (gm.GetEnemyUnitCount() >= 5) return Result.Failure;
+            if (gm.GetUnitCountWithTag("EnemyUnit1") >= 5) return Result.Failure;
             SetEnemySoldier();
             gm.AIresources -= 10;
             return Result.Success;

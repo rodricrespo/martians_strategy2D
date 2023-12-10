@@ -17,20 +17,37 @@ public class PlayerManager : MonoBehaviour
 
     void Update() {
         if (gm.currentTurn == 1){
-            BuyUnit();
+            if (gm.GetUnitCountWithTag("PlayerUnit1")<5) BuyUnit();
+            if (gm.GetUnitCountWithTag("PlayerUnit2")<3) BuyUnit2();
         }
         else return;
     }
 
     private void BuyUnit() {
         // Si se pulsa la tecla 1 --> se puede cambiar a un boton en el canvas
-        if (Input.GetKeyDown(KeyCode.Alpha1) && gm.playerResources>10)
+        if (Input.GetKeyDown(KeyCode.Alpha1) && gm.playerResources>=10)
         {
             gm.playerResources -= 10;
             Vector3 randomWalkablePosition = grid.GetRandomWalkablePosition(); // Obtener una posición walkable aleatoria del grid
             Node node = grid.NodeFromWorldPoint(randomWalkablePosition);
 
             GameObject unitObject = Instantiate(gm.playerSpaceshipPrefab, randomWalkablePosition, Quaternion.identity);  // Instancia la nave en pantalla
+            Unit myUnit = unitObject.GetComponent<Unit>();          // Obtén el componente Unit del objeto instanciado
+            if (myUnit != null) myUnit.ApplyInfluenceToGrid(grid);  // Aplicar influencia sobre el grid
+            
+            node.walkable = false;
+        }
+    }
+
+    private void BuyUnit2() {
+        // Si se pulsa la tecla 1 --> se puede cambiar a un boton en el canvas
+        if (Input.GetKeyDown(KeyCode.Alpha2) && gm.playerResources>=30)
+        {
+            gm.playerResources -= 30;
+            Vector3 randomWalkablePosition = grid.GetRandomWalkablePosition(); // Obtener una posición walkable aleatoria del grid
+            Node node = grid.NodeFromWorldPoint(randomWalkablePosition);
+
+            GameObject unitObject = Instantiate(gm.playerSpaceshipPrefab2, randomWalkablePosition, Quaternion.identity);  // Instancia la nave en pantalla
             Unit myUnit = unitObject.GetComponent<Unit>();          // Obtén el componente Unit del objeto instanciado
             if (myUnit != null) myUnit.ApplyInfluenceToGrid(grid);  // Aplicar influencia sobre el grid
             

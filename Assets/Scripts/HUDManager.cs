@@ -44,7 +44,7 @@ public class HUDManager : MonoBehaviour
 
         foreach (Unit unit in units)
         {
-            if (unit.tag == "PlayerUnit1" && unit.canAttack && unit.isSelected)
+            if ((unit.tag == "PlayerUnit1" || unit.tag == "PlayerUnit2") && unit.canAttack && unit.isSelected)
             {
                 enableButton = true;
                 selectedUnit = unit;

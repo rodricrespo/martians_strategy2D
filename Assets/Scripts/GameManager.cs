@@ -14,10 +14,12 @@ public class GameManager : MonoBehaviour
     public int currentTurn = 0;
     public BehaviourTree behaviourTree;
     public GameObject enemySpaceshipPrefab;
+    public GameObject enemySpaceshipPrefab2;
     public GameObject enemyPowerup1Prefab;
     public GameObject enemyPowerup2Prefab;
     public GameObject enemyPowerup3Prefab;
     public GameObject playerSpaceshipPrefab;
+    public GameObject playerSpaceshipPrefab2;
     public GameObject playerPowerup1Prefab;
     public GameObject playerPowerup2Prefab;
     public GameObject playerPowerup3Prefab;
@@ -150,11 +152,11 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
-    public int GetEnemyUnitCount()
+    public int GetUnitCountWithTag(string tag)
     {
-        // Obtener todas las unidades con la etiqueta "EnemyUnit1"
-        Unit[] enemyUnits = FindObjectsOfType<Unit>().Where(unit => unit.tag == "EnemyUnit1").ToArray();
-        return enemyUnits.Length;
+        // Obtener todas las unidades con la etiqueta especificada
+        Unit[] units = FindObjectsOfType<Unit>().Where(unit => unit.tag == tag).ToArray();
+        return units.Length;
     }
 
 

@@ -56,6 +56,11 @@ public class Unit : MonoBehaviour
             attackPower = 3;
         }
 
+        if(this.tag == "PlayerUnit2") {
+            unitRange = 6;
+            attackPower = 2;
+        }
+
         // Encuentra el Healthbar como nieto del objeto Unit
         healthbar = GetComponentInChildren<Healthbar>();
     }
@@ -84,7 +89,7 @@ public class Unit : MonoBehaviour
                     gm.selectedUnit = this;
                     isSelected = true;
                     //Debug.Log(this.ToString() + " selected");
-                    if(this.tag == "PlayerUnit1") {
+                    if(this.tag == "PlayerUnit1" || this.tag == "PlayerUnit2") {
                         GetWalkableTiles(); 
                         CheckEnemyUnitsInNeighbours();
                     }

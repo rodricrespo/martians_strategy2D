@@ -16,7 +16,7 @@ public class SaveMoney : BTNode
 
     public override Result Execute()
     {
-        if (gm.AIresources < 30 || gm.GetEnemyUnitCount()>=5) return Result.Failure;
+        if (gm.AIresources < 30 || gm.GetUnitCountWithTag("EnemyUnit1")>=5) return Result.Failure;
         else {
             
             return Result.Success;

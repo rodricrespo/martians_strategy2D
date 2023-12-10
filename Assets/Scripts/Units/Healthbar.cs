@@ -30,7 +30,8 @@ public class Healthbar : MonoBehaviour
             gameObject.SetActive(isVisible);
         }
         else if ((gm.currentTurn==2)){
-            bool isVisible = this.tag == "PlayerUnit1";
+            bool isVisible = false;
+            if (this.tag == "PlayerUnit1" || this.tag == "PlayerUnit2") isVisible = true;
             gameObject.SetActive(isVisible);
         }
     }
