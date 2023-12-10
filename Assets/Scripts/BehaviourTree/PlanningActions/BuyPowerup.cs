@@ -15,7 +15,7 @@ public class BuyPowerup : BTNode
 
     public override Result Execute()
     {
-        Debug.Log("ENTRO EN BUY POWERUP");
+        //Debug.Log("ENTRO EN BUY POWERUP");
         if (gm.AIresources < 50) return Result.Failure;
         else {
             //SetAttackPowerup();   //Si está en estrategia agresiva
@@ -42,7 +42,7 @@ public class BuyPowerup : BTNode
     
     private void SetResourcesPowerup()
     {
-        Debug.Log("compro POWERUP");
+        //Debug.Log("compro POWERUP");
         Vector3 randomPosition = gm.grid.GetRandomWalkablePositionInHalf(-gm.grid.gridWorldSize.x / 4);
         Node node = gm.grid.NodeFromWorldPoint(randomPosition);
         if (randomPosition != Vector3.zero)

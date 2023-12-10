@@ -5,6 +5,13 @@ using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
+
+    public enum Strategy
+    {
+        Normal,
+        Aggressive,
+        Defensive
+    }
     public int playerResources = 0;
     public int AIresources = 0;
     public int playerResourcesMultiplier = 1;
@@ -26,6 +33,7 @@ public class GameManager : MonoBehaviour
     public Grid grid;
     public Unit selectedUnit = null;
     public Pathfinding pathfinding;
+    public Strategy currentEnemyStrategy = Strategy.Normal;
     
     void Start()
     {
@@ -44,7 +52,7 @@ public class GameManager : MonoBehaviour
             unit.CheckDeath();
         }
 
-        Debug.Log(AIresourcesMultiplier);
+        Debug.Log(currentEnemyStrategy);
     }
 
     public void EndTurn() {
@@ -62,8 +70,30 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator AITurn() //Las acciones que se tienen que hacer en el turno de la IA
     {
+
+        //1. DECIDIR ESTARTEGIA
+        //2. PLANIFICAR UNIDADES
+        //3. MOVER UNIDADES
+
+        behaviourTree.strategyRoot = new Repeater ( 
+                                        behaviourTree, new Selector (behaviourTree, new BTNode[] {  
+                                                                                            //new CheckAgressiveStrategy(this),
+                                                                                            new CheckDefensiveStrategy(behaviourTree, this),
+                                                                                            new CheckNormalStrategy(behaviourTree, this),
+                                                                                
+                                                                                        }
+                                                                   )
+                                    );
+
+
+
+
+        StartCoroutine(behaviourTree.RunBehavior(behaviourTree.strategyRoot));
+        yield return new WaitForSeconds(.5f);   
+        StopCoroutine(behaviourTree.RunBehavior(behaviourTree.strategyRoot));
+
         StartCoroutine(behaviourTree.RunBehavior(behaviourTree.planningRoot));
-        yield return new WaitForSeconds(.5f);   //Esperamos un determinado tiempo y luego vamos con las unidades
+        yield return new WaitForSeconds(.5f);   
         StopCoroutine(behaviourTree.RunBehavior(behaviourTree.planningRoot));
 
         foreach (Unit enemyUnit in FindObjectsOfType<Unit>()) //No se puede hacer antes porque tenemos que hacer lo del AI planning

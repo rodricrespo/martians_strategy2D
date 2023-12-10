@@ -20,7 +20,7 @@ public class BuySpaceship2 : BTNode
 
     public override Result Execute()
     {
-        Debug.Log("ENTRO A COMPRAR UNA NAVE GRANDE");
+        //Debug.Log("ENTRO A COMPRAR UNA NAVE GRANDE");
         if (gm.AIresources < 30) {
             return Result.Failure;
         }

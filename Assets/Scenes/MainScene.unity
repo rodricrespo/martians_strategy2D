@@ -460,8 +460,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4d6f77fc2e2d404b90e04a433a4aca8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  strategyRoot: {fileID: 0}
   planningRoot: {fileID: 0}
   unitRoot: {fileID: 0}
+  gm: {fileID: 163019440}
 --- !u!114 &163019442
 MonoBehaviour:
   m_ObjectHideFlags: 0

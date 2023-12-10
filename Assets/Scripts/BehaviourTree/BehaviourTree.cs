@@ -6,15 +6,13 @@ public class BehaviourTree : MonoBehaviour
 {
     [HideInInspector]public BTNode planningRoot; //Nos da el árbol para plantear estrategias
     [HideInInspector]public BTNode unitRoot;    //Nos da el árbol para unidades
-    
-
-    //Puede haber más árboles...
+    [HideInInspector]public BTNode strategyRoot;    //Nos da el árbol para unidades
 
     public Dictionary<string, Unit> Blackboard { get; set; }
 
     void Awake()
     {
-        InitializeBlackboard(); //Para usar datos dentro del árbol
+        InitializeBlackboard(); //Para usar datos dentro del árbol -> target, posiciones....
         CreatePlanningRoot();
     }
 
@@ -52,8 +50,9 @@ public class BehaviourTree : MonoBehaviour
                                            );
 
         planningRoot = planningTree;
-    }  
+    }
 
     //LOS ARBOLES DE LAS UNDIADES ESTÁN EN GameManager PORQUE ALLI HAY REFERENCIAS A Unit
+    //LOS ARBOLES DE ESTRATEGIA TMB PORQUE LAS REFERENCIAS A GM AQUI NO FUNCIONAN
 
 }
