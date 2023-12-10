@@ -36,24 +36,13 @@ public class BehaviourTree : MonoBehaviour
 
     private void CreatePlanningRoot()
     {
-        // BTNode planningTree = new Selector (this, new BTNode[] { new SaveMoney(this),
-        //                                                           new Selector(this, new BTNode[] { 
-        //                                                                                             new BuyPowerup(this),
-        //                                                                                             new BuySoldier(this)
-                                                                                                    
-        //                                                                                           }
-        //                                                                               )
-                                                                     
-        //                                                         }
-        //                                     );
-
-        // planningRoot = planningTree;
         BTNode planningTree = new Repeater ( 
                                             this, new Selector (this, new BTNode[] {  new SaveMoney(this),
                                                                                 new Repeater( 
                                                                                               this, new Selector(this, new BTNode[] { 
                                                                                                                                     new BuyPowerup(this),
-                                                                                                                                    new BuySoldier(this)
+                                                                                                                                    new BuySpaceship2(this),
+                                                                                                                                    new BuySpaceship(this)
                                                                                                     
                                                                                                                                     }
                                                                                                                 )
@@ -64,5 +53,7 @@ public class BehaviourTree : MonoBehaviour
 
         planningRoot = planningTree;
     }  
+
+    //LOS ARBOLES DE LAS UNDIADES ESTÁN EN GameManager PORQUE ALLI HAY REFERENCIAS A Unit
 
 }

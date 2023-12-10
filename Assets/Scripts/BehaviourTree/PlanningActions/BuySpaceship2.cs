@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuySoldier : BTNode
+public class BuySpaceship2 : BTNode
 {
     private GameManager gm;
     private GameObject gameLogicObject;
     private GameObject pGrid;
     private Grid grid;
 
-    public BuySoldier(BehaviourTree t) : base(t)
+    public BuySpaceship2(BehaviourTree t) : base(t)
     {
         gameLogicObject = GameObject.Find("GameLogic");
         gm = gameLogicObject.GetComponent<GameManager>();
@@ -20,23 +20,23 @@ public class BuySoldier : BTNode
 
     public override Result Execute()
     {
-        Debug.Log("ENTRO A COMPRAR SOLDADO");
-        if (gm.AIresources < 10) {
+        Debug.Log("ENTRO A COMPRAR UNA NAVE GRANDE");
+        if (gm.AIresources < 30) {
             return Result.Failure;
         }
         else {
-            if (gm.GetUnitCountWithTag("EnemyUnit1") >= 5) return Result.Failure;
-            SetEnemySoldier();
-            gm.AIresources -= 10;
+            if (gm.GetUnitCountWithTag("EnemyUnit2") > 2) return Result.Failure;
+            SetEnemySpaceship2();
+            gm.AIresources -= 30;
             return Result.Success;
         }
     }
 
-    public void SetEnemySoldier() {
+    public void SetEnemySpaceship2() {
         Vector3 randomWalkablePosition = grid.GetRandomWalkablePosition(); // Obtener una posición walkable aleatoria del grid
         Node node = grid.NodeFromWorldPoint(randomWalkablePosition);
 
-        Instantiate(gm.enemySpaceshipPrefab, randomWalkablePosition, Quaternion.identity);  //Instancia la nave en pantalla
+        Instantiate(gm.enemySpaceshipPrefab2, randomWalkablePosition, Quaternion.identity);  //Instancia la nave en pantalla
         node.walkable = false;
     }
 }

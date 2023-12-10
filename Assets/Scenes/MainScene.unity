@@ -436,7 +436,7 @@ MonoBehaviour:
   currentTurn: 0
   behaviourTree: {fileID: 163019441}
   enemySpaceshipPrefab: {fileID: 5564129269754277272, guid: b9df03609d85ac7489da61c69e09134a, type: 3}
-  enemySpaceshipPrefab2: {fileID: 0}
+  enemySpaceshipPrefab2: {fileID: 2169160363729773909, guid: b7039d2022d0a994185223f2425ecc71, type: 3}
   enemyPowerup1Prefab: {fileID: 2452947989132186127, guid: 80006bdaa06530f459107a1c6231a541, type: 3}
   enemyPowerup2Prefab: {fileID: 2420755779722190163, guid: 04c5a868471c80e43a2c0e91e6673585, type: 3}
   enemyPowerup3Prefab: {fileID: 704618166561447385, guid: 37c0788118af05341b6a1294d56bb0bc, type: 3}
