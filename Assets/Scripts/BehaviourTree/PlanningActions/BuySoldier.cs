@@ -20,8 +20,11 @@ public class BuySoldier : BTNode
 
     public override Result Execute()
     {
-        if (gm.AIresources < 20 || gm.GetEnemyUnitCount()>=5) return Result.Failure;
+        if (gm.AIresources < 10) {
+            return Result.Failure;
+        }
         else {
+            if (gm.GetEnemyUnitCount() >= 5) return Result.Failure;
             SetEnemySoldier();
             gm.AIresources -= 10;
             return Result.Success;

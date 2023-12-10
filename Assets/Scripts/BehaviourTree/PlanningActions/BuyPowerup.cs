@@ -42,6 +42,7 @@ public class BuyPowerup : BTNode
     
     private void SetResourcesPowerup()
     {
+        Debug.Log("compro POWERUP");
         Vector3 randomPosition = gm.grid.GetRandomWalkablePositionInHalf(-gm.grid.gridWorldSize.x / 4);
         Node node = gm.grid.NodeFromWorldPoint(randomPosition);
         if (randomPosition != Vector3.zero)

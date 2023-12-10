@@ -38,4 +38,45 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void BuyAttackPowerup() {    //Se usa en el HUD manager
+        gm.playerResources -= 50;
+
+        Vector3 randomPosition = grid.GetRandomWalkablePositionInHalf(grid.gridWorldSize.x / 4);
+        Node node = grid.NodeFromWorldPoint(randomPosition);
+        if (randomPosition != Vector3.zero)
+        {
+            // Crear una instancia de gm.powerupPrefab en la posición obtenida
+            GameObject powerupInstance = Instantiate(gm.playerPowerup1Prefab, randomPosition, Quaternion.identity);
+            gm.playerPowerMultiplier += 1;
+            node.walkable = false;
+        }
+    }
+
+    public void BuyResourcesPowerup(){
+        gm.playerResources -= 50;
+        Vector3 randomPosition = grid.GetRandomWalkablePositionInHalf(grid.gridWorldSize.x / 4);
+        Node node = grid.NodeFromWorldPoint(randomPosition);
+        if (randomPosition != Vector3.zero)
+        {
+            // Crear una instancia de gm.powerupPrefab en la posición obtenida
+            GameObject powerupInstance = Instantiate(gm.playerPowerup2Prefab, randomPosition, Quaternion.identity);
+            gm.playerResourcesMultiplier += 1;
+            node.walkable = false;
+        }
+    }
+
+    public void BuyLockPowerup(){
+        gm.playerResources -= 50;
+        Vector3 randomPosition = grid.GetRandomWalkablePositionInHalf(grid.gridWorldSize.x / 4);
+        Node node = grid.NodeFromWorldPoint(randomPosition);
+        if (randomPosition != Vector3.zero)
+        {
+            // Crear una instancia de gm.powerupPrefab en la posición obtenida
+            GameObject powerupInstance = Instantiate(gm.playerPowerup3Prefab, randomPosition, Quaternion.identity);
+            gm.AIresourcesMultiplier = 0;   //Anula el conseguir recursos
+            gm.AIpowerMultiplier = 1;
+            node.walkable = false;
+        }
+    }
+
 }

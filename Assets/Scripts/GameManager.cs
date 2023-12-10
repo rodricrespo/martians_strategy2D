@@ -7,8 +7,6 @@ public class GameManager : MonoBehaviour
 {
     public int playerResources = 0;
     public int AIresources = 0;
-    public int AIHouses = 0;
-    public int playerHouses = 0;
     public int playerResourcesMultiplier = 1;
     public int playerPowerMultiplier = 1;
     public int AIresourcesMultiplier = 1;

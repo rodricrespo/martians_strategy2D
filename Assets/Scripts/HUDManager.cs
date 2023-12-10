@@ -9,7 +9,11 @@ public class HUDManager : MonoBehaviour
     public TextMeshProUGUI playerResourcesText;
     public TextMeshProUGUI AIResourcesText;
     public GameManager gm;
+    public PlayerManager pm;
     public Button attackButton; 
+    public Button attackPowerupButton;
+    public Button lockPowerupButton;
+    public Button resourcesPowerupButton;
     public bool enableButton;
 
     private Unit selectedUnit;
@@ -22,6 +26,9 @@ public class HUDManager : MonoBehaviour
         {
             // Agrega un listener al botón para manejar el clic
             attackButton.onClick.AddListener(HandleAttackButtonClick);
+            attackPowerupButton.onClick.AddListener(HandleAttackPowerupButton);
+            lockPowerupButton.onClick.AddListener(HandleLockPowerupButton);
+            resourcesPowerupButton.onClick.AddListener(HandleResourcesPowerupButton);
         }
     }
 
@@ -49,11 +56,17 @@ public class HUDManager : MonoBehaviour
         {
             attackButton.interactable = enableButton;
         }
+
+        bool enablePowerupButtons = gm.currentTurn == 1 && gm.playerResources >= 50; //Solo serán interactuables si es el turno del jugador y este tiene suficientes recursos para pagarlos
+
+        if (attackPowerupButton != null) attackPowerupButton.interactable = enablePowerupButtons;
+        if (lockPowerupButton != null) lockPowerupButton.interactable = enablePowerupButtons;
+        if (resourcesPowerupButton != null) resourcesPowerupButton.interactable = enablePowerupButtons;
     }
 
     void HandleAttackButtonClick()
     {
-        Debug.Log("Botón de ataque clicado.");
+        //Debug.Log("Botón de ataque clicado.");
         // Llama a la función de ataque en la unidad seleccionada
         if (selectedUnit.playerTarget != null) selectedUnit.AttackEnemyUnit(selectedUnit.playerTarget);
         selectedUnit.canAttack = false;
@@ -61,4 +74,14 @@ public class HUDManager : MonoBehaviour
         attackButton.interactable = false; // Desactiva el botón después de hacer clic
         gm.ResetTiles();
     }
+
+    void HandleAttackPowerupButton() {
+        pm.BuyAttackPowerup();
+    }
+    void HandleLockPowerupButton()  {
+        pm.BuyLockPowerup();
+    }
+    void HandleResourcesPowerupButton () {
+        pm.BuyResourcesPowerup();
+    }   
 }
