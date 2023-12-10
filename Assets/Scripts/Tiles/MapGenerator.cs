@@ -87,9 +87,7 @@ public class MapGenerator : MonoBehaviour
     {
         for (int i = 0; i < maxEnemySpaceships; i++)
         {
-            // Obtener un nodo aleatorio de la mitad izquierda del grid
-            Vector3 randomPosition = grid.GetRandomWalkablePositionInHalf(Half.Left);
-
+            Vector3 randomPosition = grid.GetRandomWalkablePositionInHalf(-grid.gridWorldSize.x / 4); // Mitad izquierda
             if (randomPosition != Vector3.zero)
             {
                 Instantiate(enemySpaceshipPrefab, randomPosition, Quaternion.identity);
@@ -108,9 +106,7 @@ public class MapGenerator : MonoBehaviour
     {
         for (int i = 0; i < maxPlayerSpaceships; i++)
         {
-            // Obtener un nodo aleatorio de la mitad derecha del grid
-            Vector3 randomPosition = grid.GetRandomWalkablePositionInHalf(Half.Right);
-
+            Vector3 randomPosition = grid.GetRandomWalkablePositionInHalf(grid.gridWorldSize.x / 4); // Mitad derecha
             if (randomPosition != Vector3.zero)
             {
                 Instantiate(playerSpaceshipPrefab, randomPosition, Quaternion.identity);

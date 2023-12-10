@@ -167,6 +167,40 @@ public class Grid : MonoBehaviour
     //     return Color.Lerp(Color.yellow, Color.red, normalizedInfluence);
     // }
 
+    public Vector3 GetRandomWalkablePositionInHalf(float xPos)
+    {
+        List<Vector3> walkablePositions = new List<Vector3>();
+
+        // Filtra las posiciones walkable según la posición x especificada
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                Vector3 worldPoint = grid[x, y].worldPosition;
+
+                if ((xPos < 0 && worldPoint.x < xPos) ||
+                    (xPos >= 0 && worldPoint.x >= xPos))
+                {
+                    if (grid[x, y].walkable)
+                    {
+                        walkablePositions.Add(worldPoint);
+                    }
+                }
+            }
+        }
+
+        if (walkablePositions.Count > 0)
+        {
+            int randomIndex = Random.Range(0, walkablePositions.Count);
+            return walkablePositions[randomIndex];
+        }
+        else
+        {
+            Debug.LogWarning("No hay posiciones walkable disponibles en la mitad especificada.");
+            return Vector3.zero;
+        }
+    }
+
 
 
 }
