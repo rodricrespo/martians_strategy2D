@@ -20,6 +20,7 @@ public class BuySoldier : BTNode
 
     public override Result Execute()
     {
+        Debug.Log("ENTRO A COMPRAR SOLDADO");
         if (gm.AIresources < 10) {
             return Result.Failure;
         }

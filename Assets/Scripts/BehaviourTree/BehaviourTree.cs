@@ -36,16 +36,31 @@ public class BehaviourTree : MonoBehaviour
 
     private void CreatePlanningRoot()
     {
-        BTNode planningTree = new Selector (this, new BTNode[] { new SaveMoney(this),
-                                                                  new Selector(this, new BTNode[] { 
-                                                                                                    new BuyPowerup(this),
-                                                                                                    new BuySoldier(this)
+        // BTNode planningTree = new Selector (this, new BTNode[] { new SaveMoney(this),
+        //                                                           new Selector(this, new BTNode[] { 
+        //                                                                                             new BuyPowerup(this),
+        //                                                                                             new BuySoldier(this)
                                                                                                     
-                                                                                                  }
-                                                                                      )
+        //                                                                                           }
+        //                                                                               )
                                                                      
-                                                                }
-                                            );
+        //                                                         }
+        //                                     );
+
+        // planningRoot = planningTree;
+        BTNode planningTree = new Repeater ( 
+                                            this, new Selector (this, new BTNode[] {  new SaveMoney(this),
+                                                                                new Repeater( 
+                                                                                              this, new Selector(this, new BTNode[] { 
+                                                                                                                                    new BuyPowerup(this),
+                                                                                                                                    new BuySoldier(this)
+                                                                                                    
+                                                                                                                                    }
+                                                                                                                )
+                                                                                            )
+                                                                              }
+                                                         )
+                                           );
 
         planningRoot = planningTree;
     }  
