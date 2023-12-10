@@ -36,7 +36,7 @@ public class Pathfinding : MonoBehaviour
                 return RetracePath(startNode, currentNode);
             }
 
-            foreach (Node neighbour in grid.GetNeighours(currentNode))
+            foreach (Node neighbour in grid.GetNeighbours(currentNode))
             {
                 if (neighbour.hasPlant || !neighbour.walkable || closedSet.Contains(neighbour) || neighbour.hasUnit)
                     continue;
@@ -79,7 +79,7 @@ public class Pathfinding : MonoBehaviour
                 return RetracePath(startNode, currentNode);
             }
 
-            foreach (Node neighbour in grid.GetNeighours(currentNode))
+            foreach (Node neighbour in grid.GetNeighbours(currentNode))
             {
                 if (neighbour.hasPlant || !neighbour.walkable || closedSet.Contains(neighbour) || neighbour.hasUnit)
                     continue;
@@ -107,7 +107,7 @@ public class Pathfinding : MonoBehaviour
     private static List<Vector3> FindNearestPath(Node startNode, Node targetNode)
     {
         // Buscar un nodo vecino del objetivo
-        foreach (Node neighbour in grid.GetNeighours(targetNode))
+        foreach (Node neighbour in grid.GetNeighbours(targetNode))
         {
             if (!neighbour.hasPlant && neighbour.walkable && !neighbour.hasUnit)
             {

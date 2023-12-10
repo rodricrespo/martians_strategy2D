@@ -10,6 +10,7 @@ public class Node : IHeapItem<Node>
     public Vector3 worldPosition;
     public int gridX;
     public int gridY;
+    public Unit unit;
 
     public int gCost;
     public int hCost;
@@ -25,6 +26,7 @@ public class Node : IHeapItem<Node>
         gridX = _gridX;
         gridY = _gridY;
         hasUnit = false;
+        unit = null;
     }
 
     public float fCost

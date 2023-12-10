@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Unit : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class Unit : MonoBehaviour
     public int health = 10;
     public int maxHealth = 10;
     public int attackPower = 5;
+    public bool canAttack;
 
     private GameManager gm;
     private GameObject gameLogicObject;
@@ -33,6 +35,7 @@ public class Unit : MonoBehaviour
 
         isSelected = false;
         hasMoved = false;   //Resetearlo tras cambiar de turno
+        canAttack = false;
 
         if (this.tag == "EnemyUnit1") {
             unitRoot = bt.unitRoot;
@@ -55,7 +58,7 @@ public class Unit : MonoBehaviour
         healthbar.UpdateHealthbar(health, maxHealth);
     }
 
-    public void MoveUnit(Node targetNode)
+    public void MoveUnit(Node targetNode)   //Se usa en Tile.cs porque se tiene que clickar una Tile, es para el Player
     {
         if (isSelected && !hasMoved)
         {
@@ -73,7 +76,10 @@ public class Unit : MonoBehaviour
                     gm.selectedUnit = this;
                     isSelected = true;
                     //Debug.Log(this.ToString() + " selected");
-                    if(this.tag == "PlayerUnit1") GetWalkableTiles(); 
+                    if(this.tag == "PlayerUnit1") {
+                        GetWalkableTiles(); 
+                        CheckEnemyUnitsInNeighbours();
+                    }
                 }
             }
 
@@ -99,7 +105,7 @@ public class Unit : MonoBehaviour
         if (unitNode != null)
         {
             unitNode.influenceCost += 10f; // Valor de influencia 
-            foreach (Node neighbour in grid.GetNeighours(unitNode))
+            foreach (Node neighbour in grid.GetNeighbours(unitNode))
             {
                 neighbour.influenceCost += 5f; // Valor de influencia en nodos vecinos
             }
@@ -131,7 +137,8 @@ public class Unit : MonoBehaviour
             }
 
             StartCoroutine(StartMovementCoroutine(targetNode));
-            gm.ResetTiles();
+            CheckEnemyUnitsInNeighbours();
+            if (!canAttack) gm.ResetTiles();
         }
     }
 
@@ -201,4 +208,25 @@ public class Unit : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public void CheckEnemyUnitsInNeighbours()
+    {
+        // Nodo actual de la unidad
+        Node currentNode = grid.NodeFromWorldPoint(transform.position);
+
+        // Verifica si el nodo actual no es nulo
+        if (currentNode != null)
+        {
+            List<Node> neighbours = grid.GetNeighbours(currentNode);
+
+            foreach (Node neighbour in neighbours)
+            {
+                // Verifica si hay una unidad en el nodo y si la etiqueta es "EnemyUnit1"
+                if (neighbour != null && neighbour.hasUnit && neighbour.unit != null && neighbour.unit.tag == "EnemyUnit1")
+                {
+                    Debug.Log("TIENE ENEMIGOS VECINOS");
+                    canAttack = true;
+                }
+            }
+        }
+    }
 }
