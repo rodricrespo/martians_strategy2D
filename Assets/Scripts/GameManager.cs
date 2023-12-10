@@ -93,6 +93,7 @@ public class GameManager : MonoBehaviour
         foreach (Unit unit in units) {
             unit.isSelected = false;
             unit.hasMoved = false;
+            unit.playerTarget = null;
         }
     }
 

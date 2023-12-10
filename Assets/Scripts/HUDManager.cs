@@ -55,7 +55,7 @@ public class HUDManager : MonoBehaviour
     {
         Debug.Log("Botón de ataque clicado.");
         // Llama a la función de ataque en la unidad seleccionada
-        //selectedUnit.AttackEnemy();
+        if (selectedUnit.playerTarget != null) selectedUnit.AttackEnemyUnit(selectedUnit.playerTarget);
         selectedUnit.canAttack = false;
         selectedUnit = null;
         attackButton.interactable = false; // Desactiva el botón después de hacer clic

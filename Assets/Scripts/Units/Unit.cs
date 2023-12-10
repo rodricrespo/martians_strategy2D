@@ -14,6 +14,7 @@ public class Unit : MonoBehaviour
     public int maxHealth = 10;
     public int attackPower = 5;
     public bool canAttack;
+    public Unit playerTarget;
 
     private GameManager gm;
     private GameObject gameLogicObject;
@@ -36,6 +37,7 @@ public class Unit : MonoBehaviour
         isSelected = false;
         hasMoved = false;   //Resetearlo tras cambiar de turno
         canAttack = false;
+        playerTarget = null;
 
         if (this.tag == "EnemyUnit1") {
             unitRoot = bt.unitRoot;
@@ -87,6 +89,7 @@ public class Unit : MonoBehaviour
                 gm.selectedUnit = null;
                 gm.ResetTiles();
                 isSelected = false;
+                playerTarget = null;
                 //Debug.Log(this.ToString() + " Deseeleccionado");
             }
         }
@@ -98,16 +101,51 @@ public class Unit : MonoBehaviour
         // Obtener el nodo correspondiente a la posición de la unidad
         Node unitNode = grid.NodeFromWorldPoint(transform.position);
 
-        // Resetear la influencia en el nodo y en los nodos vecinos
+        // Resetear la influencia en todos los nodos
         ResetInfluenceInGrid(grid);
 
-        // Establecer la influencia en el nodo y en los nodos vecinos
+        // Establecer la influencia en el nodo y en los nodos adyacentes
         if (unitNode != null)
         {
-            unitNode.influenceCost += 10f; // Valor de influencia 
-            foreach (Node neighbour in grid.GetNeighbours(unitNode))
+            // Parámetros de influencia
+            float baseInfluence = 10f;
+            float influenceDecayRate = 2f;
+
+            // Aplicar influencia inicial en el nodo actual
+            unitNode.influenceCost += baseInfluence;
+
+            // Crear una lista de nodos para visitar
+            Queue<Node> nodesToVisit = new Queue<Node>();
+            nodesToVisit.Enqueue(unitNode);
+
+            while (nodesToVisit.Count > 0)
             {
-                neighbour.influenceCost += 5f; // Valor de influencia en nodos vecinos
+                // Obtener el siguiente nodo de la cola
+                Node currentNode = nodesToVisit.Dequeue();
+
+                // Obtener los nodos vecinos
+                List<Node> neighbours = grid.GetNeighbours(currentNode);
+
+                foreach (Node neighbour in neighbours)
+                {
+                    if (neighbour != null && !nodesToVisit.Contains(neighbour))
+                    {
+                        // Calcular la distancia entre el nodo actual y el vecino
+                        float distance = Vector3.Distance(currentNode.worldPosition, neighbour.worldPosition);
+
+                        // Ajustar la influencia en función de la distancia
+                        float influenceValue = baseInfluence - influenceDecayRate * distance;
+
+                        // Establecer la influencia en el vecino
+                        neighbour.influenceCost += Mathf.Max(influenceValue, 0f);
+
+                        // Añadir el vecino a la lista de nodos a visitar si no ha sido visitado
+                        if (!nodesToVisit.Contains(neighbour))
+                        {
+                            nodesToVisit.Enqueue(neighbour);
+                        }
+                    }
+                }
             }
         }
     }
@@ -138,7 +176,10 @@ public class Unit : MonoBehaviour
 
             StartCoroutine(StartMovementCoroutine(targetNode));
             CheckEnemyUnitsInNeighbours();
-            if (!canAttack) gm.ResetTiles();
+            //if (!canAttack) gm.ResetTiles();
+            gm.ResetTiles();
+
+            //ApplyInfluenceToGrid(grid); // Aplicar influencia a la cuadrícula después de moverse
         }
     }
 
@@ -225,8 +266,13 @@ public class Unit : MonoBehaviour
                 {
                     Debug.Log("TIENE ENEMIGOS VECINOS");
                     canAttack = true;
+                    playerTarget = neighbour.unit;
                 }
             }
         }
+    }
+
+    public void AttackEnemyUnit(Unit enemyUnit){
+        enemyUnit.health -= this.attackPower;
     }
 }

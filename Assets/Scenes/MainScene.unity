@@ -502,7 +502,7 @@ MonoBehaviour:
   playerResourcesText: {fileID: 522022486}
   AIResourcesText: {fileID: 25973521}
   gm: {fileID: 163019440}
-  attackButton: {fileID: 0}
+  attackButton: {fileID: 684280065}
   enableButton: 0
 --- !u!1 &502983505
 GameObject:

@@ -41,32 +41,6 @@ public class Grid : MonoBehaviour
         }
     }
 
-    void OnDrawGizmos()
-    {
-        Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, gridWorldSize.y, 1));
-
-        if (grid != null && displayGridGizmos)
-        {
-            foreach (Node n in grid)
-            {
-                Gizmos.color = Color.white;
-                if (!n.walkable)
-                    Gizmos.color = Color.red;
-                if (n.hasUnit)
-                    Gizmos.color = Color.blue;
-                if (n.hasPlant)
-                    Gizmos.color = Color.green;
-
-                // Cambiar el color a azul si el nodo tiene influencia
-                if (n.influenceCost > 0)
-                    Gizmos.color = Color.blue;
-
-                Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - 0.1f));
-            }
-        }
-    }
-
-
     public Node NodeFromWorldPoint(Vector3 worldPosition)   //Se usa para el pathfinding y al crear sprites <<--- NO CAMBIAR!!!
     { 
         float percentX = (worldPosition.x + gridWorldSize.x / 2) / gridWorldSize.x;
@@ -150,6 +124,52 @@ public class Grid : MonoBehaviour
             }
         }
     }
+
+    void OnDrawGizmos()      //<-----PARA LAS UNIDADES Y OBSTACULOS
+    {
+        Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, gridWorldSize.y, 1));
+
+        if (grid != null && displayGridGizmos)
+        {
+            foreach (Node n in grid)
+            {
+                Gizmos.color = Color.white;
+                if (!n.walkable)
+                    Gizmos.color = Color.red;
+                if (n.hasUnit)
+                    Gizmos.color = Color.blue;
+                if (n.hasPlant)
+                    Gizmos.color = Color.green;
+
+                // Cambiar el color a azul si el nodo tiene influencia
+                if (n.influenceCost > 0)
+                    Gizmos.color = Color.blue;
+
+                Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - 0.1f));
+            }
+        }
+    }
+    // void OnDrawGizmos() //<-----PARA LA INFLUENCIA
+    // {
+    //     if (displayGridGizmos && grid != null)
+    //     {
+    //         foreach (Node node in grid)
+    //         {
+    //             Debug.Log(node.influenceCost);
+    //             Gizmos.color = CalculateInfluenceColor(node.influenceCost);
+    //             Gizmos.DrawSphere(node.worldPosition, nodeRadius * 0.5f);
+    //         }
+    //     }
+    // }
+
+    // Color CalculateInfluenceColor(float influence)
+    // {
+    //     float minInfluence = 1f;
+    //     float maxInfluence = 20f;
+
+    //     float normalizedInfluence = Mathf.Clamp01((influence - minInfluence) / (maxInfluence - minInfluence));
+    //     return Color.Lerp(Color.yellow, Color.red, normalizedInfluence);
+    // }
 
 
 
