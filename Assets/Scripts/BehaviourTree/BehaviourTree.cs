@@ -36,10 +36,11 @@ public class BehaviourTree : MonoBehaviour
 
     private void CreatePlanningRoot()
     {
-        BTNode planningTree = new Sequencer (this, new BTNode[] { new SaveMoney(this),
+        BTNode planningTree = new Selector (this, new BTNode[] { new SaveMoney(this),
                                                                   new Selector(this, new BTNode[] { 
-                                                                                                    new BuySoldier(this),
-                                                                                                    new BuyHouse(this)
+                                                                                                    new BuyPowerup(this),
+                                                                                                    new BuySoldier(this)
+                                                                                                    
                                                                                                   }
                                                                                       )
                                                                      

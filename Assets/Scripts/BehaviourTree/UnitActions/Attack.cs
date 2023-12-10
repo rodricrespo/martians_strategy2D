@@ -6,15 +6,17 @@ public class Attack : BTNode
 {
     private Unit unit;
     private BehaviourTree behaviourTree;
+    private GameManager gm;
 
-    public Attack(BehaviourTree t, Unit _unit) : base(t)
+    public Attack(BehaviourTree t, Unit _unit, GameManager _gm) : base(t)
     {
         behaviourTree = t;
         unit = _unit; 
+        gm = _gm;
     }
 
-    public override Result Execute(){
-
+    public override Result Execute()
+    {
         Unit enemyUnit = (Unit)behaviourTree.Blackboard["enemyUnit"];
 
         if (enemyUnit != null)
@@ -23,6 +25,5 @@ public class Attack : BTNode
                 return Result.Success;
             }
         else return Result.Failure;
-            
     }
 }

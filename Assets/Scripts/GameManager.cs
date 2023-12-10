@@ -10,11 +10,19 @@ public class GameManager : MonoBehaviour
     public int AIHouses = 0;
     public int playerHouses = 0;
     public int playerResourcesMultiplier = 1;
+    public int playerPowerMultiplier = 1;
     public int AIresourcesMultiplier = 1;
+    public int AIpowerMultiplier = 1;
     public int currentTurn = 0;
     public BehaviourTree behaviourTree;
     public GameObject enemySpaceshipPrefab;
+    public GameObject enemyPowerup1Prefab;
+    public GameObject enemyPowerup2Prefab;
+    public GameObject enemyPowerup3Prefab;
     public GameObject playerSpaceshipPrefab;
+    public GameObject playerPowerup1Prefab;
+    public GameObject playerPowerup2Prefab;
+    public GameObject playerPowerup3Prefab;
     public Grid grid;
     public Unit selectedUnit = null;
     public Pathfinding pathfinding;
@@ -35,6 +43,8 @@ public class GameManager : MonoBehaviour
         foreach (Unit unit in FindObjectsOfType<Unit>()) {
             unit.CheckDeath();
         }
+
+        Debug.Log(AIresourcesMultiplier);
     }
 
     public void EndTurn() {
@@ -65,7 +75,7 @@ public class GameManager : MonoBehaviour
                                                                  new Sequencer (behaviourTree, new BTNode[] {
                                                                                                                 new CheckEnemiesInRange(behaviourTree, enemyUnit),
                                                                                                                 new MoveEnemy(behaviourTree, enemyUnit, grid),
-                                                                                                                new Attack(behaviourTree, enemyUnit)
+                                                                                                                new Attack(behaviourTree, enemyUnit, this)
                                                                                                             }
                                                                                ),
                                                                 new Sequencer (behaviourTree, new BTNode[] {
@@ -140,6 +150,13 @@ public class GameManager : MonoBehaviour
         }
 
         return null;
+    }
+
+    public int GetEnemyUnitCount()
+    {
+        // Obtener todas las unidades con la etiqueta "EnemyUnit1"
+        Unit[] enemyUnits = FindObjectsOfType<Unit>().Where(unit => unit.tag == "EnemyUnit1").ToArray();
+        return enemyUnits.Length;
     }
 
 

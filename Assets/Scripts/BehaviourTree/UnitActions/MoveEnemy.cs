@@ -21,7 +21,7 @@ public class MoveEnemy : BTNode
      public override Result Execute()
     {
         // Verificar si 'enemyUnit' está presente en el Blackboard y es de tipo Unit
-        if (behaviourTree.Blackboard.TryGetValue("enemyUnit", out Unit enemyUnit))
+        if (behaviourTree.Blackboard!=null && behaviourTree.Blackboard.TryGetValue("enemyUnit", out Unit enemyUnit))
         {
             Node targetNode = grid.NodeFromWorldPoint(enemyUnit.transform.position);
 

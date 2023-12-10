@@ -22,8 +22,6 @@ public class CheckEnemiesInRange : BTNode
             // Verificar si la unidad es del jugador y está dentro del rango del enemigo
             if (otherUnit.tag == "PlayerUnit1" && IsWithinRange(otherUnit.transform.position, unit.transform.position, unit.unitRange))
             {
-                // Debug.Log("Unidad del jugador dentro del rango.");
-                 
                 behaviourTree.Blackboard["enemyUnit"] = (Unit)otherUnit; // Almacenar la información del enemigo en el Blackboard
 
                 return Result.Success;

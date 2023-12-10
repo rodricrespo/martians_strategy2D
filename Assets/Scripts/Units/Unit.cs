@@ -42,12 +42,12 @@ public class Unit : MonoBehaviour
         if (this.tag == "EnemyUnit1") {
             unitRoot = bt.unitRoot;
             unitRange = 3;
-            attackPower = 5;
+            attackPower = 3;
         }
 
         if(this.tag == "PlayerUnit1") {
             unitRange = 3;
-            attackPower = 5;
+            attackPower = 3;
         }
 
         // Encuentra el Healthbar como nieto del objeto Unit
@@ -104,14 +104,12 @@ public class Unit : MonoBehaviour
         // Verificar que el nodo de la unidad no sea nulo
         if (unitNode == null)
         {
-            Debug.LogError("Node not found for the unit.");
             return;
         }
 
         // Verificar si el nodo ya tiene influencia aplicada
         if (unitNode.influenceCost > 0)
         {
-            Debug.LogWarning("Influence already applied to the unit's node.");
             return;
         }
 
@@ -236,6 +234,11 @@ public class Unit : MonoBehaviour
             {
                 deathNode.walkable = true;
                 deathNode.hasUnit = false;
+                // Remover la unidad del diccionario Blackboard
+                if (gm.behaviourTree.Blackboard.ContainsKey("enemyUnit"))
+                {
+                    gm.behaviourTree.Blackboard.Remove("enemyUnit");
+                }
             }
 
             StartCoroutine(DestroyAfterDelay(0.1f));
@@ -263,7 +266,7 @@ public class Unit : MonoBehaviour
                 // Verifica si hay una unidad en el nodo y si la etiqueta es "EnemyUnit1"
                 if (neighbour != null && neighbour.hasUnit && neighbour.unit != null && neighbour.unit.tag == "EnemyUnit1")
                 {
-                    Debug.Log("TIENE ENEMIGOS VECINOS");
+                    //Debug.Log("TIENE ENEMIGOS VECINOS");
                     canAttack = true;
                     playerTarget = neighbour.unit;
                 }
@@ -271,7 +274,7 @@ public class Unit : MonoBehaviour
         }
     }
 
-    public void AttackEnemyUnit(Unit enemyUnit){
-        enemyUnit.health -= this.attackPower;
+    public void AttackEnemyUnit(Unit enemyUnit){    //Lo usa el Player
+        enemyUnit.health -= this.attackPower * gm.playerPowerMultiplier;
     }
 }
