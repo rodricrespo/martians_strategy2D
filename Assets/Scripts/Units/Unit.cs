@@ -101,50 +101,49 @@ public class Unit : MonoBehaviour
         // Obtener el nodo correspondiente a la posición de la unidad
         Node unitNode = grid.NodeFromWorldPoint(transform.position);
 
-        // Resetear la influencia en todos los nodos
-        ResetInfluenceInGrid(grid);
-
-        // Establecer la influencia en el nodo y en los nodos adyacentes
-        if (unitNode != null)
+        // Verificar que el nodo de la unidad no sea nulo
+        if (unitNode == null)
         {
-            // Parámetros de influencia
-            float baseInfluence = 10f;
-            float influenceDecayRate = 2f;
+            Debug.LogError("Node not found for the unit.");
+            return;
+        }
 
-            // Aplicar influencia inicial en el nodo actual
-            unitNode.influenceCost += baseInfluence;
+        // Verificar si el nodo ya tiene influencia aplicada
+        if (unitNode.influenceCost > 0)
+        {
+            Debug.LogWarning("Influence already applied to the unit's node.");
+            return;
+        }
 
-            // Crear una lista de nodos para visitar
-            Queue<Node> nodesToVisit = new Queue<Node>();
-            nodesToVisit.Enqueue(unitNode);
+        // Parámetros de influencia
+        float baseInfluence = 1.5f;
+        float influenceDecayRate = 1f;
 
-            while (nodesToVisit.Count > 0)
+        // Aplicar influencia inicial en el nodo actual
+        unitNode.influenceCost += baseInfluence;
+
+        // Crear una lista de nodos para visitar
+        Queue<Node> nodesToVisit = new Queue<Node>();
+        nodesToVisit.Enqueue(unitNode);
+
+        // Crear una lista de nodos visitados para evitar bucles infinitos
+        HashSet<Node> visitedNodes = new HashSet<Node>();
+        visitedNodes.Add(unitNode);
+
+        while (nodesToVisit.Count > 0)
+        {
+            Node currentNode = nodesToVisit.Dequeue();
+            List<Node> neighbours = grid.GetNeighbours(currentNode);
+
+            foreach (Node neighbour in neighbours)
             {
-                // Obtener el siguiente nodo de la cola
-                Node currentNode = nodesToVisit.Dequeue();
-
-                // Obtener los nodos vecinos
-                List<Node> neighbours = grid.GetNeighbours(currentNode);
-
-                foreach (Node neighbour in neighbours)
+                if (neighbour != null && !visitedNodes.Contains(neighbour))
                 {
-                    if (neighbour != null && !nodesToVisit.Contains(neighbour))
-                    {
-                        // Calcular la distancia entre el nodo actual y el vecino
-                        float distance = Vector3.Distance(currentNode.worldPosition, neighbour.worldPosition);
-
-                        // Ajustar la influencia en función de la distancia
-                        float influenceValue = baseInfluence - influenceDecayRate * distance;
-
-                        // Establecer la influencia en el vecino
-                        neighbour.influenceCost += Mathf.Max(influenceValue, 0f);
-
-                        // Añadir el vecino a la lista de nodos a visitar si no ha sido visitado
-                        if (!nodesToVisit.Contains(neighbour))
-                        {
-                            nodesToVisit.Enqueue(neighbour);
-                        }
-                    }
+                    float distance = Vector3.Distance(currentNode.worldPosition, neighbour.worldPosition);
+                    float influenceValue = baseInfluence - influenceDecayRate * distance; // Ajustar la influencia en función de la distancia
+                    neighbour.influenceCost += Mathf.Max(influenceValue, 0f);
+                    nodesToVisit.Enqueue(neighbour);
+                    visitedNodes.Add(neighbour);
                 }
             }
         }
@@ -179,7 +178,7 @@ public class Unit : MonoBehaviour
             //if (!canAttack) gm.ResetTiles();
             gm.ResetTiles();
 
-            //ApplyInfluenceToGrid(grid); // Aplicar influencia a la cuadrícula después de moverse
+            ApplyInfluenceToGrid(grid); // Aplicar influencia a la cuadrícula después de moverse
         }
     }
 
