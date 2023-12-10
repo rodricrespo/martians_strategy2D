@@ -8,6 +8,8 @@ TagManager:
   - EnemyUnit1
   - EnemyPowerup
   - PlayerPowerup
+  - EnemyUnit2
+  - PlayerUnit2
   layers:
   - Default
   - TransparentFX

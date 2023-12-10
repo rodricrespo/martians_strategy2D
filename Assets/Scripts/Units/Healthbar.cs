@@ -25,7 +25,8 @@ public class Healthbar : MonoBehaviour
     {
         if (gm.currentTurn==1)
         {
-            bool isVisible = this.tag == "EnemyUnit1";
+            bool isVisible = false;
+            if (this.tag == "EnemyUnit1" || this.tag == "EnemyUnit2") isVisible = true;
             gameObject.SetActive(isVisible);
         }
         else if ((gm.currentTurn==2)){

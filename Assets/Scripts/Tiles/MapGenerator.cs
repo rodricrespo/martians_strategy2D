@@ -9,11 +9,13 @@ public class MapGenerator : MonoBehaviour
     public float tileScaleFactor = 1.0f; // Para cambiar el tamaño de las tiles
     public GameObject plantPrefab;
     public GameObject enemySpaceshipPrefab;
+    public GameObject enemySpaceshipPrefab2;
     public GameObject playerSpaceshipPrefab;
 
 
     public int maxPlants = 10;
     public int maxEnemySpaceships = 3;
+    public int maxEnemySpaceships2 = 1;
     public int maxPlayerSpaceships = 3;
 
     private Node node;
@@ -98,6 +100,19 @@ public class MapGenerator : MonoBehaviour
                     node.walkable = false;
                     node.hasUnit = true;
                 }
+            }
+        }
+
+        Vector3 randomPosition2 = grid.GetRandomWalkablePositionInHalf(-grid.gridWorldSize.x / 4); // Mitad izquierda
+        if (randomPosition2 != Vector3.zero)
+        {
+            Instantiate(enemySpaceshipPrefab2, randomPosition2, Quaternion.identity);
+
+            Node node = grid.NodeFromWorldPoint(randomPosition2);
+            if (node != null)
+            {
+                    node.walkable = false;
+                    node.hasUnit = true;
             }
         }
     }

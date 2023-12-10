@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
 
         foreach (Unit enemyUnit in FindObjectsOfType<Unit>()) //No se puede hacer antes porque tenemos que hacer lo del AI planning
         {
-            if (enemyUnit.tag == "EnemyUnit1"){
+            if (enemyUnit.tag == "EnemyUnit1" || enemyUnit.tag == "EnemyUnit2"){
                 //saber la estrategia del enemigo (neutral, defensiva, agresiva) y luego generar el árbol en consecuencia
                 enemyUnit.unitRoot = 
                     new Selector( behaviourTree, new  BTNode[] { 

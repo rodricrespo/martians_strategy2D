@@ -45,6 +45,12 @@ public class Unit : MonoBehaviour
             attackPower = 3;
         }
 
+        if (this.tag == "EnemyUnit2") {
+            unitRoot = bt.unitRoot;
+            unitRange = 6;
+            attackPower = 2;
+        }
+
         if(this.tag == "PlayerUnit1") {
             unitRange = 3;
             attackPower = 3;
@@ -74,7 +80,7 @@ public class Unit : MonoBehaviour
     {
         if (gm.currentTurn == 1){
             if (!isSelected) {  //Selecciona
-                if (this.tag!="EnemyUnit1"){
+                if (this.tag!="EnemyUnit1" || this.tag!="EnemyUnit2"){
                     gm.selectedUnit = this;
                     isSelected = true;
                     //Debug.Log(this.ToString() + " selected");
@@ -159,7 +165,7 @@ public class Unit : MonoBehaviour
     public void MoveToNode(Node targetNode)
     {
         // Obtener la ruta utilizando el algoritmo de pathfinding
-        if (this.tag == "EnemyUnit1") path = Pathfinding.FindEnemyPath(transform.position, targetNode.worldPosition);
+        if (this.tag == "EnemyUnit1" || this.tag == "EnemyUnit2") path = Pathfinding.FindEnemyPath(transform.position, targetNode.worldPosition);
         else path = Pathfinding.FindPath(transform.position, targetNode.worldPosition);
 
         if (path.Count > 0)
@@ -264,7 +270,7 @@ public class Unit : MonoBehaviour
             foreach (Node neighbour in neighbours)
             {
                 // Verifica si hay una unidad en el nodo y si la etiqueta es "EnemyUnit1"
-                if (neighbour != null && neighbour.hasUnit && neighbour.unit != null && neighbour.unit.tag == "EnemyUnit1")
+                if (neighbour != null && neighbour.hasUnit && neighbour.unit != null && (neighbour.unit.tag == "EnemyUnit1" || neighbour.unit.tag == "EnemyUnit2" ))
                 {
                     //Debug.Log("TIENE ENEMIGOS VECINOS");
                     canAttack = true;
