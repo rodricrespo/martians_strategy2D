@@ -91,6 +91,21 @@ public class GameManager : MonoBehaviour
 
 
         //2. PLANIFICAR UNIDADES
+
+        behaviourTree.planningRoot = new Repeater  ( 
+                                                    behaviourTree, new Selector (behaviourTree, new BTNode[] { new SaveMoney(behaviourTree),
+                                                                                                               new Repeater( behaviourTree, new Selector(behaviourTree, new BTNode[] { 
+                                                                                                                                                                                    new BuyPowerup(behaviourTree),
+                                                                                                                                                                                    new BuySpaceship2(behaviourTree),
+                                                                                                                                                                                    new BuySpaceship(behaviourTree)
+                                                                                                    
+                                                                                                                                                                                  }
+                                                                                                                                                      )
+                                                                                                                         )
+                                                                                                        }
+                                                                               )
+                                                    );
+
         StartCoroutine(behaviourTree.RunBehavior(behaviourTree.planningRoot));
         yield return new WaitForSeconds(.5f);   
         StopCoroutine(behaviourTree.RunBehavior(behaviourTree.planningRoot));

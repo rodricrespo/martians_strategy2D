@@ -4,16 +4,15 @@ using UnityEngine;
 
 public class BehaviourTree : MonoBehaviour
 {
-    [HideInInspector]public BTNode planningRoot; //Nos da el árbol para plantear estrategias
-    [HideInInspector]public BTNode unitRoot;    //Nos da el árbol para unidades
-    [HideInInspector]public BTNode strategyRoot;    //Nos da el árbol para unidades
+    [HideInInspector]public BTNode planningRoot; 
+    [HideInInspector]public BTNode unitRoot;    
+    [HideInInspector]public BTNode strategyRoot;    
 
     public Dictionary<string, Unit> Blackboard { get; set; }
 
     void Awake()
     {
         InitializeBlackboard(); //Para usar datos dentro del árbol -> target, posiciones....
-        CreatePlanningRoot();
     }
 
     public IEnumerator RunBehavior(BTNode root)
@@ -30,26 +29,6 @@ public class BehaviourTree : MonoBehaviour
     private void InitializeBlackboard()
     {
         Blackboard = new Dictionary<string, Unit>();
-    }
-
-    private void CreatePlanningRoot()
-    {
-        BTNode planningTree = new Repeater ( 
-                                            this, new Selector (this, new BTNode[] {  new SaveMoney(this),
-                                                                                new Repeater( 
-                                                                                              this, new Selector(this, new BTNode[] { 
-                                                                                                                                    new BuyPowerup(this),
-                                                                                                                                    new BuySpaceship2(this),
-                                                                                                                                    new BuySpaceship(this)
-                                                                                                    
-                                                                                                                                    }
-                                                                                                                )
-                                                                                            )
-                                                                              }
-                                                         )
-                                           );
-
-        planningRoot = planningTree;
     }
 
     //LOS ARBOLES DE LAS UNDIADES ESTÁN EN GameManager PORQUE ALLI HAY REFERENCIAS A Unit
