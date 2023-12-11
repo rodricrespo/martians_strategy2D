@@ -38,5 +38,6 @@ public class BuySpaceship : BTNode
 
         Instantiate(gm.enemySpaceshipPrefab, randomWalkablePosition, Quaternion.identity);  //Instancia la nave en pantalla
         node.walkable = false;
+        node.hasUnit = true;
     }
 }

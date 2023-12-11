@@ -25,10 +25,13 @@ public class BuySpaceship2 : BTNode
             return Result.Failure;
         }
         else {
-            if (gm.GetUnitCountWithTag("EnemyUnit2") > 2) return Result.Failure;
-            SetEnemySpaceship2();
-            gm.AIresources -= gm.spaceshipPrice2;
-            return Result.Success;
+            if (gm.GetUnitCountWithTag("EnemyUnit2") >= 2) return Result.Failure;
+            else {
+                SetEnemySpaceship2();
+                gm.AIresources -= gm.spaceshipPrice2;
+                return Result.Success;
+            }
+            
         }
     }
 
@@ -38,5 +41,6 @@ public class BuySpaceship2 : BTNode
 
         Instantiate(gm.enemySpaceshipPrefab2, randomWalkablePosition, Quaternion.identity);  //Instancia la nave en pantalla
         node.walkable = false;
+        node.hasUnit = true;
     }
 }

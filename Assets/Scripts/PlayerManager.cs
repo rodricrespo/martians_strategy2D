@@ -36,6 +36,7 @@ public class PlayerManager : MonoBehaviour
             if (myUnit != null) myUnit.ApplyInfluenceToGrid(grid);  // Aplicar influencia sobre el grid
             
             node.walkable = false;
+            node.hasUnit = true;
         }
     }
 
@@ -52,6 +53,7 @@ public class PlayerManager : MonoBehaviour
             if (myUnit != null) myUnit.ApplyInfluenceToGrid(grid);  // Aplicar influencia sobre el grid
             
             node.walkable = false;
+            node.hasUnit = true;
         }
     }
 

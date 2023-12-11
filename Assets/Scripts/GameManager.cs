@@ -103,7 +103,7 @@ public class GameManager : MonoBehaviour
         //2. PLANIFICAR UNIDADES
 
         behaviourTree.planningRoot = new Repeater  ( 
-                                                    behaviourTree, new Selector (behaviourTree, new BTNode[] { new SaveMoney(behaviourTree),
+                                                    behaviourTree, new Selector (behaviourTree, new BTNode[] { 
                                                                                                                new Repeater( behaviourTree, new Selector(behaviourTree, new BTNode[] { 
                                                                                                                                                                                     new BuyPowerup(behaviourTree),
                                                                                                                                                                                     new BuySpaceship2(behaviourTree),
@@ -111,7 +111,8 @@ public class GameManager : MonoBehaviour
                                                                                                     
                                                                                                                                                                                   }
                                                                                                                                                       )
-                                                                                                                         )
+                                                                                                                         ),
+                                                                                                                new SaveMoney(behaviourTree)
                                                                                                         }
                                                                                )
                                                     );
