@@ -57,7 +57,7 @@ public class HUDManager : MonoBehaviour
             attackButton.interactable = enableButton;
         }
 
-        bool enablePowerupButtons = gm.currentTurn == 1 && gm.playerResources >= 50; //Solo serán interactuables si es el turno del jugador y este tiene suficientes recursos para pagarlos
+        bool enablePowerupButtons = gm.currentTurn == 1 && gm.playerResources >= gm.powerupPrice; //Solo serán interactuables si es el turno del jugador y este tiene suficientes recursos para pagarlos
 
         if (attackPowerupButton != null) attackPowerupButton.interactable = enablePowerupButtons;
         if (lockPowerupButton != null) lockPowerupButton.interactable = enablePowerupButtons;

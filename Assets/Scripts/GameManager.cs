@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
         Aggressive,
         Defensive
     }
+    public int powerupPrice = 35;   //CAMBIAR A 50 QUE ESTO SOLO ES PARA PROBAR
     public int playerResources = 0;
     public int AIresources = 0;
     public int playerResourcesMultiplier = 1;
@@ -39,6 +40,7 @@ public class GameManager : MonoBehaviour
     {
         currentTurn = 1;
         UpdateNodesWithUnits(); //Primera pasada para determinar si hay nodos vecinos con unidades enemigas
+        powerupPrice = 35;
     }
 
     
@@ -114,30 +116,57 @@ public class GameManager : MonoBehaviour
         //3. MOVER UNIDADES
         foreach (Unit enemyUnit in FindObjectsOfType<Unit>()) //No se puede hacer antes porque tenemos que hacer lo del AI planning
         {
+            
             if (enemyUnit.tag == "EnemyUnit1" || enemyUnit.tag == "EnemyUnit2"){
-                //saber la estrategia del enemigo (neutral, defensiva, agresiva) y luego generar el árbol en consecuencia
-                enemyUnit.unitRoot = 
-                    new Selector( behaviourTree, new  BTNode[] { 
-                                                                 new Sequencer (behaviourTree, new BTNode[] {
-                                                                                                                new CheckEnemiesInRange(behaviourTree, enemyUnit),
-                                                                                                                new MoveEnemy(behaviourTree, enemyUnit, grid),
-                                                                                                                new Attack(behaviourTree, enemyUnit, this)
-                                                                                                            }
-                                                                               ),
-                                                                new Sequencer (behaviourTree, new BTNode[] {
-                                                                                                                new MoveEnemy(behaviourTree, enemyUnit, grid) //A una posición cercana al enemigo
-                                                                                                            }
+                if (currentEnemyStrategy==Strategy.Normal){
+                    enemyUnit.unitRoot = 
+                        new Repeater(behaviourTree, new Selector( behaviourTree, new  BTNode[] { 
+                                                                                                  new Repeater (behaviourTree, new Sequencer (behaviourTree, new BTNode[] {
+                                                                                                                                                                            new CheckEnemiesInRange(behaviourTree, enemyUnit),
+                                                                                                                                                                            new MoveEnemy(behaviourTree, enemyUnit, grid, this),
+                                                                                                                                                                            new Attack(behaviourTree, enemyUnit, this)
+                                                                                                                                                                          }
+                                                                                                                                             )
+                                                                                                                ),
+                                                                                                        new Sequencer (behaviourTree, new BTNode[] {    //Sobra el sequencer...
+                                                                                                                                                        new MoveEnemy(behaviourTree, enemyUnit, grid, this) //A una posición cercana al enemigo  
+                                                                                                                                                    }
+                                                                                                        
+                                                                                                                    )
                                                                 
-                                                                              )
-                                                            
-                                                                                         
-                                                               }      
-                                );
+                                                                                            
+                                                                                                }      
+                                                                )
+                                    );
+                }
+                else if (currentEnemyStrategy==Strategy.Defensive){
+                    enemyUnit.unitRoot = new Repeater(behaviourTree, new Selector( behaviourTree, new  BTNode[] {
+                                                                                                                    new Repeater( behaviourTree, 
+                                                                                                                                                new Selector (behaviourTree, new BTNode[]{
+                                                                                                                                                                                            new Repeater (behaviourTree, new Sequencer (behaviourTree, new BTNode[] {
+                                                                                                                                                                                                                                                                        new CheckPowerupInRange(behaviourTree, this, enemyUnit, enemyPowerup1Prefab),
+                                                                                                                                                                                                                                                                        new CheckEnemiesInRange(behaviourTree, enemyUnit),
+                                                                                                                                                                                                                                                                        new Attack(behaviourTree, enemyUnit, this)
+                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                        )
+                                                                                                                                                                                                        ),
+                                                                                                                                                                                            new MoveEnemy(behaviourTree, enemyUnit, grid, this) //MOVER HACIA POWERUP
+                                                                                                                                                                                        }
+                                                                                                                                                            )
+                                                                                                                                 ),
+                                                                                                                                 new Retract (behaviourTree, enemyUnit, grid, this) //REPLIEGUE
+                                                                                                                }
+                                                                                 )
+                                                     );
+                }
 
                 StartCoroutine(behaviourTree.RunBehavior(enemyUnit.unitRoot));
                 
                 yield return new WaitForSeconds(1.75f);
             }
+
+            
+
         }
 
         EndTurn();

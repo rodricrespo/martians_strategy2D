@@ -9,6 +9,7 @@ public class BehaviourTree : MonoBehaviour
     [HideInInspector]public BTNode strategyRoot;    
 
     public Dictionary<string, Unit> Blackboard { get; set; }
+    public Dictionary<string, object> Blackboard2 { get; set; }
 
     void Awake()
     {
@@ -29,6 +30,7 @@ public class BehaviourTree : MonoBehaviour
     private void InitializeBlackboard()
     {
         Blackboard = new Dictionary<string, Unit>();
+        Blackboard2 = new Dictionary<string, object>();
     }
 
     //LOS ARBOLES DE LAS UNDIADES ESTÁN EN GameManager PORQUE ALLI HAY REFERENCIAS A Unit

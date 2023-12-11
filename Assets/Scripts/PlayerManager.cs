@@ -40,7 +40,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     private void BuyUnit2() {
-        // Si se pulsa la tecla 1 --> se puede cambiar a un boton en el canvas
+        // Si se pulsa la tecla 2 --> se puede cambiar a un boton en el canvas
         if (Input.GetKeyDown(KeyCode.Alpha2) && gm.playerResources>=30)
         {
             gm.playerResources -= 30;
@@ -56,7 +56,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void BuyAttackPowerup() {    //Se usa en el HUD manager
-        gm.playerResources -= 50;
+        gm.playerResources -= gm.powerupPrice;
 
         Vector3 randomPosition = grid.GetRandomWalkablePositionInHalf(grid.gridWorldSize.x / 4);
         Node node = grid.NodeFromWorldPoint(randomPosition);
@@ -70,7 +70,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void BuyResourcesPowerup(){
-        gm.playerResources -= 50;
+        gm.playerResources -= gm.powerupPrice;
         Vector3 randomPosition = grid.GetRandomWalkablePositionInHalf(grid.gridWorldSize.x / 4);
         Node node = grid.NodeFromWorldPoint(randomPosition);
         if (randomPosition != Vector3.zero)
@@ -83,7 +83,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void BuyLockPowerup(){
-        gm.playerResources -= 50;
+        gm.playerResources -= gm.powerupPrice;
         Vector3 randomPosition = grid.GetRandomWalkablePositionInHalf(grid.gridWorldSize.x / 4);
         Node node = grid.NodeFromWorldPoint(randomPosition);
         if (randomPosition != Vector3.zero)

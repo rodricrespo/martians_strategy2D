@@ -201,6 +201,27 @@ public class Grid : MonoBehaviour
         }
     }
 
+    public Vector3 GetLeftmostPosition()
+    {
+        float leftmostX = float.MaxValue; // Inicializar con un valor grande para asegurar que cualquier posición sea menor
+        Vector3 leftmostPosition = Vector3.zero;
+
+        // Iterar sobre los nodos en la primera columna del grid
+        for (int y = 0; y < gridSizeY; y++)
+        {
+            Node currentNode = grid[0, y];
+            
+            // Verificar si el nodo es transitable y tiene una posición x menor que la actual izquierda
+            if (currentNode.walkable && currentNode.worldPosition.x < leftmostX)
+            {
+                leftmostX = currentNode.worldPosition.x;
+                leftmostPosition = currentNode.worldPosition;
+            }
+        }
+
+        return leftmostPosition;
+    }
+
 
 
 }

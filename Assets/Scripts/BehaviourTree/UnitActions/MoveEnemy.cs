@@ -11,40 +11,71 @@ public class MoveEnemy : BTNode
     private Node currentNode;
     private Grid grid;
 
-    public MoveEnemy(BehaviourTree t, Unit _unit, Grid g) : base(t)
+    public MoveEnemy(BehaviourTree t, Unit _unit, Grid g, GameManager _gm) : base(t)
     {
         unit = _unit;
         behaviourTree = t;
         grid = g;
+        gm = _gm;
     }
 
      public override Result Execute()
     {
-        // Verificar si 'enemyUnit' está presente en el Blackboard y es de tipo Unit
-        if (behaviourTree.Blackboard!=null && behaviourTree.Blackboard.TryGetValue("enemyUnit", out Unit enemyUnit))
-        {
-            Node targetNode = grid.NodeFromWorldPoint(enemyUnit.transform.position);
+        if (gm.currentEnemyStrategy == GameManager.Strategy.Normal){
 
-            if (targetNode != null)
+            // Verificar si 'enemyUnit' está presente en el Blackboard y es de tipo Unit
+            if (behaviourTree.Blackboard!=null && behaviourTree.Blackboard.TryGetValue("enemyUnit", out Unit enemyUnit))
             {
-                unit.MoveToNode(targetNode);
-                return Result.Success;
+                Node targetNode = grid.NodeFromWorldPoint(enemyUnit.transform.position);
+
+                if (targetNode != null)
+                {
+                    unit.MoveToNode(targetNode);
+                    return Result.Success;
+                }
+                else return Result.Failure; // Manejo de error si no se encuentra un nodo válido
             }
-            else return Result.Failure; // Manejo de error si no se encuentra un nodo válido
+
+            else
+            {
+                // La clave 'enemyUnit' no está presente en el Blackboard
+                Vector3 randomPosition = grid.GetRandomWalkablePosition();
+                if (randomPosition != Vector3.zero)
+                {
+                    Node randomNode = grid.NodeFromWorldPoint(randomPosition);
+                    unit.MoveToNode(randomNode);
+                    return Result.Success;
+                }
+                else return Result.Failure; 
+                
+            }
+
         }
 
-        else
+        else if (gm.currentEnemyStrategy == GameManager.Strategy.Defensive)
         {
-            // La clave 'enemyUnit' no está presente en el Blackboard
-            Vector3 randomPosition = grid.GetRandomWalkablePosition();
-            if (randomPosition != Vector3.zero)
+            if (behaviourTree.Blackboard2 != null && behaviourTree.Blackboard2.TryGetValue("PowerupObject", out object powerupObject))
             {
-                Node randomNode = grid.NodeFromWorldPoint(randomPosition);
-                unit.MoveToNode(randomNode);
-                return Result.Success;
+                Debug.Log("HACIA LA POSICION DEL NODO PARA DEFENDERLO");
+                if (powerupObject is GameObject powerup)
+                {
+                    Node targetNode = grid.NodeFromWorldPoint(powerup.transform.position);
+
+                    if (targetNode != null)
+                    {
+                        unit.MoveToNode(targetNode);
+                        return Result.Success;
+                    }
+                    else return Result.Failure;
+                }
+                else return Result.Failure;
             }
-            else return Result.Failure; 
-            
+            else return Result.Failure; //no hay powerup en el Blackboard2
         }
+
+        else { //gm.currentEnemyStrategy == GameManager.Strategy.Defensive
+            return Result.Failure;
+        } 
+        
     }
 }
