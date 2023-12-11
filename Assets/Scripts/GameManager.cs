@@ -12,7 +12,9 @@ public class GameManager : MonoBehaviour
         Aggressive,
         Defensive
     }
-    public int powerupPrice = 35;   //CAMBIAR A 50 QUE ESTO SOLO ES PARA PROBAR
+    public int powerupPrice = 35;   
+    public int spaceshipPrice = 10;
+    public int spaceshipPrice2 = 20;
     public int playerResources = 0;
     public int AIresources = 0;
     public int playerResourcesMultiplier = 1;
@@ -41,6 +43,8 @@ public class GameManager : MonoBehaviour
         currentTurn = 1;
         UpdateNodesWithUnits(); //Primera pasada para determinar si hay nodos vecinos con unidades enemigas
         powerupPrice = 35;
+        spaceshipPrice = 10;
+        spaceshipPrice2 = 20;
     }
 
     
@@ -52,6 +56,10 @@ public class GameManager : MonoBehaviour
 
         foreach (Unit unit in FindObjectsOfType<Unit>()) {
             unit.CheckDeath();
+        }
+
+        foreach (Powerup p in FindObjectsOfType<Powerup>()) {
+            p.CheckPowerupDeath();
         }
 
         Debug.Log(currentEnemyStrategy);
@@ -141,10 +149,9 @@ public class GameManager : MonoBehaviour
                 }
                 else if (currentEnemyStrategy==Strategy.Defensive){
                     enemyUnit.unitRoot = new Repeater(behaviourTree, new Selector( behaviourTree, new  BTNode[] {
-                                                                                                                    new Repeater( behaviourTree, 
-                                                                                                                                                new Selector (behaviourTree, new BTNode[]{
+                                                                                                                    new Repeater( behaviourTree, new Selector (behaviourTree, new BTNode[]{
                                                                                                                                                                                             new Repeater (behaviourTree, new Sequencer (behaviourTree, new BTNode[] {
-                                                                                                                                                                                                                                                                        new CheckPowerupInRange(behaviourTree, this, enemyUnit, enemyPowerup1Prefab),
+                                                                                                                                                                                                                                                                        new CheckPowerupInRange(behaviourTree, this, enemyUnit),
                                                                                                                                                                                                                                                                         new CheckEnemiesInRange(behaviourTree, enemyUnit),
                                                                                                                                                                                                                                                                         new Attack(behaviourTree, enemyUnit, this)
                                                                                                                                                                                                                                                                     }
@@ -154,7 +161,35 @@ public class GameManager : MonoBehaviour
                                                                                                                                                                                         }
                                                                                                                                                             )
                                                                                                                                  ),
-                                                                                                                                 new Retract (behaviourTree, enemyUnit, grid, this) //REPLIEGUE
+                                                                                                                    new Repeater( behaviourTree, new Sequencer (behaviourTree, new BTNode[] {
+                                                                                                                                                                                                new Retract (behaviourTree, enemyUnit, grid, this), //REPLIEGUE
+                                                                                                                                                                                                new CheckEnemiesInRange(behaviourTree, enemyUnit),  //SOLO ATACARÁ ENEMIGOS SI ESTÁ REPLEGADO
+                                                                                                                                                                                                new Attack(behaviourTree, enemyUnit, this)
+                                                                                                                                                                                            }
+                                                                                                                                                                )
+                                                                                                                                                                    
+                                                                                                                                )
+                                                                                                                }
+                                                                                 )
+                                                     );
+                }
+                else // Strategy.Aggressive
+                {
+                    enemyUnit.unitRoot = new Repeater(behaviourTree, new Selector( behaviourTree, new  BTNode[] {
+                                                                                                                    new Repeater( behaviourTree, new Selector (behaviourTree, new BTNode[]{
+                                                                                                                                                                                                new CheckPowerupInRange(behaviourTree, this, enemyUnit),
+                                                                                                                                                                                                new AttackPowerup(behaviourTree, enemyUnit, this)
+                                                                                                                                                                                          }
+                                                                                                                                                              )
+                                                                                                                                ),
+                                                                                                                                new MoveEnemy(behaviourTree, enemyUnit, grid, this), //MOVER HACIA POWERUP
+                                                                                                                    new Repeater (behaviourTree, new Sequencer (behaviourTree, new BTNode[]{
+                                                                                                                                                                                                new CheckEnemiesInRange(behaviourTree, enemyUnit),
+                                                                                                                                                                                                new Attack(behaviourTree, enemyUnit, this)
+                                                                                                                                                                                            }
+                                                                                                                                                               )
+                                                                                                                                                
+                                                                                                                                 ), new MoveEnemy(behaviourTree, enemyUnit, grid, this)
                                                                                                                 }
                                                                                  )
                                                      );
@@ -206,7 +241,9 @@ public class GameManager : MonoBehaviour
 
                 // Verifica si hay una unidad en el nodo
                 Unit unitInNode = FindUnitInNode(node);
+                Powerup p = FindPowerupInNode(node);
                 node.unit = unitInNode;
+                node.powerup = p;
             }
         }
     }
@@ -221,6 +258,22 @@ public class GameManager : MonoBehaviour
             if (unit != null)
             {
                 return unit;
+            }
+        }
+
+        return null;
+    }
+
+    private Powerup FindPowerupInNode(Node node)
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(node.worldPosition, grid.nodeRadius);
+
+        foreach (var collider in colliders)
+        {
+            Powerup p = collider.GetComponent<Powerup>();
+            if (p != null)
+            {
+                return p;
             }
         }
 

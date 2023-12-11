@@ -21,13 +21,13 @@ public class BuySpaceship2 : BTNode
     public override Result Execute()
     {
         //Debug.Log("ENTRO A COMPRAR UNA NAVE GRANDE");
-        if (gm.AIresources < 30) {
+        if (gm.AIresources < gm.spaceshipPrice2) {
             return Result.Failure;
         }
         else {
             if (gm.GetUnitCountWithTag("EnemyUnit2") > 2) return Result.Failure;
             SetEnemySpaceship2();
-            gm.AIresources -= 30;
+            gm.AIresources -= gm.spaceshipPrice2;
             return Result.Success;
         }
     }

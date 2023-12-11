@@ -36,6 +36,11 @@ public class BuyPowerup : BTNode
             GameObject powerupInstance = Instantiate(gm.enemyPowerup1Prefab, randomPosition, Quaternion.identity);
             gm.AIpowerMultiplier += 1;
             node.walkable = false;
+            node.hasPowerup = true;
+            // Acceder al componente Powerup del GameObject instanciado
+            Powerup powerupComponent = powerupInstance.GetComponent<Powerup>();
+            if (powerupComponent != null) node.powerup = powerupComponent;
+            
         }
     }
 
@@ -51,6 +56,10 @@ public class BuyPowerup : BTNode
             GameObject powerupInstance = Instantiate(gm.enemyPowerup2Prefab, randomPosition, Quaternion.identity);
             gm.AIresourcesMultiplier += 1;
             node.walkable = false;
+            node.hasPowerup = true;
+            // Acceder al componente Powerup del GameObject instanciado
+            Powerup powerupComponent = powerupInstance.GetComponent<Powerup>();
+            if (powerupComponent != null) node.powerup = powerupComponent;
         }
     }
 
@@ -65,6 +74,10 @@ public class BuyPowerup : BTNode
             gm.playerResourcesMultiplier = 0;   //Anula el conseguir recursos
             gm.playerPowerMultiplier = 1;
             node.walkable = false;
+            node.hasPowerup = true;
+            // Acceder al componente Powerup del GameObject instanciado
+            Powerup powerupComponent = powerupInstance.GetComponent<Powerup>();
+            if (powerupComponent != null) node.powerup = powerupComponent;
         }
     }
     

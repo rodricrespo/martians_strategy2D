@@ -69,6 +69,12 @@ public class HUDManager : MonoBehaviour
         //Debug.Log("Botón de ataque clicado.");
         // Llama a la función de ataque en la unidad seleccionada
         if (selectedUnit.playerTarget != null) selectedUnit.AttackEnemyUnit(selectedUnit.playerTarget);
+        else {
+            if (selectedUnit.playerPowerupTarget != null) {
+                Debug.Log("ATACO AL POWERUP");
+                selectedUnit.AttackEnemyPowerup(selectedUnit.playerPowerupTarget);
+            }
+        }
         selectedUnit.canAttack = false;
         selectedUnit = null;
         attackButton.interactable = false; // Desactiva el botón después de hacer clic

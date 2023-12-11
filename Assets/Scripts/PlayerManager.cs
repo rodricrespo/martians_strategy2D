@@ -25,9 +25,9 @@ public class PlayerManager : MonoBehaviour
 
     private void BuyUnit() {
         // Si se pulsa la tecla 1 --> se puede cambiar a un boton en el canvas
-        if (Input.GetKeyDown(KeyCode.Alpha1) && gm.playerResources>=10)
+        if (Input.GetKeyDown(KeyCode.Alpha1) && gm.playerResources>=gm.spaceshipPrice)
         {
-            gm.playerResources -= 10;
+            gm.playerResources -= gm.spaceshipPrice;
             Vector3 randomWalkablePosition = grid.GetRandomWalkablePosition(); // Obtener una posición walkable aleatoria del grid
             Node node = grid.NodeFromWorldPoint(randomWalkablePosition);
 
@@ -41,9 +41,9 @@ public class PlayerManager : MonoBehaviour
 
     private void BuyUnit2() {
         // Si se pulsa la tecla 2 --> se puede cambiar a un boton en el canvas
-        if (Input.GetKeyDown(KeyCode.Alpha2) && gm.playerResources>=30)
+        if (Input.GetKeyDown(KeyCode.Alpha2) && gm.playerResources>=gm.spaceshipPrice2)
         {
-            gm.playerResources -= 30;
+            gm.playerResources -= gm.spaceshipPrice2;
             Vector3 randomWalkablePosition = grid.GetRandomWalkablePosition(); // Obtener una posición walkable aleatoria del grid
             Node node = grid.NodeFromWorldPoint(randomWalkablePosition);
 
@@ -66,6 +66,10 @@ public class PlayerManager : MonoBehaviour
             GameObject powerupInstance = Instantiate(gm.playerPowerup1Prefab, randomPosition, Quaternion.identity);
             gm.playerPowerMultiplier += 1;
             node.walkable = false;
+            node.hasPowerup = true;
+            // Acceder al componente Powerup del GameObject instanciado
+            Powerup powerupComponent = powerupInstance.GetComponent<Powerup>();
+            if (powerupComponent != null) node.powerup = powerupComponent;
         }
     }
 
@@ -79,6 +83,10 @@ public class PlayerManager : MonoBehaviour
             GameObject powerupInstance = Instantiate(gm.playerPowerup2Prefab, randomPosition, Quaternion.identity);
             gm.playerResourcesMultiplier += 1;
             node.walkable = false;
+            node.hasPowerup = true;
+            // Acceder al componente Powerup del GameObject instanciado
+            Powerup powerupComponent = powerupInstance.GetComponent<Powerup>();
+            if (powerupComponent != null) node.powerup = powerupComponent;
         }
     }
 
@@ -93,6 +101,10 @@ public class PlayerManager : MonoBehaviour
             gm.AIresourcesMultiplier = 0;   //Anula el conseguir recursos
             gm.AIpowerMultiplier = 1;
             node.walkable = false;
+            node.hasPowerup = true;
+            // Acceder al componente Powerup del GameObject instanciado
+            Powerup powerupComponent = powerupInstance.GetComponent<Powerup>();
+            if (powerupComponent != null) node.powerup = powerupComponent;
         }
     }
 

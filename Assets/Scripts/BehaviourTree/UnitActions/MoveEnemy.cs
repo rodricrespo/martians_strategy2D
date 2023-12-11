@@ -30,7 +30,7 @@ public class MoveEnemy : BTNode
 
                 if (targetNode != null)
                 {
-                    unit.MoveToNode(targetNode);
+                    if (unit!=null)unit.MoveToNode(targetNode);
                     return Result.Success;
                 }
                 else return Result.Failure; // Manejo de error si no se encuentra un nodo válido
@@ -43,7 +43,7 @@ public class MoveEnemy : BTNode
                 if (randomPosition != Vector3.zero)
                 {
                     Node randomNode = grid.NodeFromWorldPoint(randomPosition);
-                    unit.MoveToNode(randomNode);
+                     if (unit!=null)unit.MoveToNode(randomNode);
                     return Result.Success;
                 }
                 else return Result.Failure; 
@@ -54,27 +54,48 @@ public class MoveEnemy : BTNode
 
         else if (gm.currentEnemyStrategy == GameManager.Strategy.Defensive)
         {
-            if (behaviourTree.Blackboard2 != null && behaviourTree.Blackboard2.TryGetValue("PowerupObject", out object powerupObject))
+            if (behaviourTree.Blackboard2 != null && behaviourTree.Blackboard2.TryGetValue("PowerupObject", out Powerup powerup))
             {
                 Debug.Log("HACIA LA POSICION DEL NODO PARA DEFENDERLO");
-                if (powerupObject is GameObject powerup)
-                {
-                    Node targetNode = grid.NodeFromWorldPoint(powerup.transform.position);
+                Node targetNode = grid.NodeFromWorldPoint(powerup.transform.position);
 
-                    if (targetNode != null)
-                    {
-                        unit.MoveToNode(targetNode);
-                        return Result.Success;
-                    }
-                    else return Result.Failure;
+                if (targetNode != null)
+                {
+                     if (unit!=null)unit.MoveToNode(targetNode);
+                    return Result.Success;
                 }
                 else return Result.Failure;
+                
             }
             else return Result.Failure; //no hay powerup en el Blackboard2
         }
 
         else { //gm.currentEnemyStrategy == GameManager.Strategy.Defensive
-            return Result.Failure;
+            if (behaviourTree.Blackboard2 != null && behaviourTree.Blackboard2.TryGetValue("PowerupObject", out Powerup powerup))
+            {
+                Debug.Log("HACIA LA POSICION DEL NODO PARA ATACARLO");
+                Node targetNode = grid.NodeFromWorldPoint(powerup.transform.position);
+
+                if (targetNode != null)
+                {
+                     if (unit!=null)unit.MoveToNode(targetNode);
+                    return Result.Success;
+                }
+                else return Result.Failure;
+                
+            }
+            else
+            {
+                // La clave 'PowerupObject' no está presente en el Blackboard
+                Vector3 randomPosition = grid.GetRandomWalkablePosition();
+                if (randomPosition != Vector3.zero)
+                {
+                    Node randomNode = grid.NodeFromWorldPoint(randomPosition);
+                     if (unit!=null)unit.MoveToNode(randomNode);
+                    return Result.Success;
+                }
+                else return Result.Failure;  
+            }
         } 
         
     }

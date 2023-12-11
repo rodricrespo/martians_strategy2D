@@ -7,9 +7,14 @@ TagManager:
   - PlayerUnit1
   - EnemyUnit1
   - EnemyPowerup
-  - PlayerPowerup
   - EnemyUnit2
   - PlayerUnit2
+  - PlayerPowerup1
+  - PlayerPowerup2
+  - PlayerPowerup3
+  - EnemyPowerup1
+  - EnemyPowerup2
+  - EnemyPowerup3
   layers:
   - Default
   - TransparentFX

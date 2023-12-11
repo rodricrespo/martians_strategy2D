@@ -15,6 +15,7 @@ public class Unit : MonoBehaviour
     public int attackPower = 5;
     public bool canAttack;
     public Unit playerTarget;
+    public Powerup playerPowerupTarget;
 
     private GameManager gm;
     private GameObject gameLogicObject;
@@ -38,6 +39,7 @@ public class Unit : MonoBehaviour
         hasMoved = false;   //Resetearlo tras cambiar de turno
         canAttack = false;
         playerTarget = null;
+        playerPowerupTarget = null;
 
         if (this.tag == "EnemyUnit1") {
             unitRoot = bt.unitRoot;
@@ -101,6 +103,7 @@ public class Unit : MonoBehaviour
                 gm.ResetTiles();
                 isSelected = false;
                 playerTarget = null;
+                playerPowerupTarget = null;
                 //Debug.Log(this.ToString() + " Deseeleccionado");
             }
         }
@@ -281,12 +284,25 @@ public class Unit : MonoBehaviour
                     canAttack = true;
                     playerTarget = neighbour.unit;
                 }
+                // //Su target es un Powerup
+                else if (neighbour != null && neighbour.hasPowerup && neighbour.powerup != null && (neighbour.powerup.tag == "EnemyPowerup1" || neighbour.unit.tag == "EnemyPowerup2" || neighbour.unit.tag == "EnemyPowerup3")){
+                    canAttack = true;
+                    playerPowerupTarget = neighbour.powerup;
+                }
             }
         }
     }
 
+
+
     public void AttackEnemyUnit(Unit enemyUnit){    //Lo usa el Player
         enemyUnit.health -= this.attackPower * gm.playerPowerMultiplier;
+        canAttack = false;
+    }
+
+    public void AttackEnemyPowerup(Powerup p) {  //Lo usa el Player
+        p.powerupHealth -= this.attackPower * gm.playerPowerMultiplier;
+        playerPowerupTarget = null;
         canAttack = false;
     }
 }

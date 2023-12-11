@@ -295,8 +295,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 186, y: -237}
-  m_SizeDelta: {x: 110.6435, y: 97.6535}
+  m_AnchoredPosition: {x: 166.8, y: -227.96}
+  m_SizeDelta: {x: 67.8382, y: 59.8737}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &112563335
 MonoBehaviour:
@@ -427,6 +427,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53945733761a3324599c008e5a821ecb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  powerupPrice: 10
+  spaceshipPrice: 10
+  spaceshipPrice2: 20
   playerResources: 0
   AIresources: 0
   playerResourcesMultiplier: 1
@@ -448,6 +451,7 @@ MonoBehaviour:
   grid: {fileID: 502983506}
   selectedUnit: {fileID: 0}
   pathfinding: {fileID: 0}
+  currentEnemyStrategy: 0
 --- !u!114 &163019441
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -460,10 +464,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4d6f77fc2e2d404b90e04a433a4aca8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  strategyRoot: {fileID: 0}
   planningRoot: {fileID: 0}
   unitRoot: {fileID: 0}
-  gm: {fileID: 163019440}
+  strategyRoot: {fileID: 0}
 --- !u!114 &163019442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -541,8 +544,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -184, y: -237}
-  m_SizeDelta: {x: 110.6435, y: 97.6535}
+  m_AnchoredPosition: {x: -165.71729, y: -228.79}
+  m_SizeDelta: {x: 74.0781, y: 65.3811}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &187079519
 MonoBehaviour:
@@ -1004,8 +1007,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2, y: -237}
-  m_SizeDelta: {x: 110.6435, y: 97.6535}
+  m_AnchoredPosition: {x: 4.621, y: -228.79}
+  m_SizeDelta: {x: 69.7252, y: 61.5392}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &523934677
 MonoBehaviour:
@@ -1262,7 +1265,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 996916722637008519, guid: 80006bdaa06530f459107a1c6231a541, type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 996916722637008519, guid: 80006bdaa06530f459107a1c6231a541, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2171,10 +2174,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: playerPowerup3Prefab
       objectReference: {fileID: 0}
-    - target: {fileID: 4682286297452041876, guid: a6fe8e291fab91e46b391ec94112dd0d, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a6fe8e291fab91e46b391ec94112dd0d, type: 3}
 --- !u!1001 &6238441131465708681
@@ -2324,7 +2323,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6820461243140656708, guid: 04c5a868471c80e43a2c0e91e6673585, type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 6820461243140656708, guid: 04c5a868471c80e43a2c0e91e6673585, type: 3}
       propertyPath: m_LocalPosition.x

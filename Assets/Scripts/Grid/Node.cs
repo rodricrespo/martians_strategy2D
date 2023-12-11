@@ -7,10 +7,12 @@ public class Node : IHeapItem<Node>
     public bool walkable;
     public bool hasUnit;
     public bool hasPlant;
+    public bool hasPowerup;
     public Vector3 worldPosition;
     public int gridX;
     public int gridY;
     public Unit unit;
+    public Powerup powerup;
 
     public int gCost;
     public int hCost;
@@ -26,7 +28,9 @@ public class Node : IHeapItem<Node>
         gridX = _gridX;
         gridY = _gridY;
         hasUnit = false;
+        hasPowerup = false;
         unit = null;
+        powerup = null;
     }
 
     public float fCost

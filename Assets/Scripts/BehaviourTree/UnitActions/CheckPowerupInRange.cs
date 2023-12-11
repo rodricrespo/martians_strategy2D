@@ -6,33 +6,42 @@ public class CheckPowerupInRange : BTNode
 {
     private GameManager gm;
     private BehaviourTree behaviourTree;
-    private GameObject powerup;
     private Unit unit;
+    private Powerup powerup;
 
-    public CheckPowerupInRange(BehaviourTree t, GameManager _gm, Unit _unit, GameObject gameObject) : base(t)
+    public CheckPowerupInRange(BehaviourTree t, GameManager _gm, Unit _unit) : base(t)
     {
         gm = _gm;  
         behaviourTree = t;
         unit = _unit;
-        powerup = gameObject;  
     }
 
     public override Result Execute()
     {
-        // Verificar si el powerup existe
-        if (powerup != null)
+        Powerup[] allPowerups = GameObject.FindObjectsOfType<Powerup>();
+
+        foreach (Powerup p in allPowerups)
         {
-            if (IsWithinRange(powerup.transform.position, unit.transform.position, unit.unitRange)){
+            // Verificar estrategia defensiva y que tenga powerup activo
+            if (gm.currentEnemyStrategy==GameManager.Strategy.Defensive && p.tag == "EnemyPowerup" && IsWithinRange(p.transform.position, unit.transform.position, unit.unitRange))
+            {
                 Debug.Log("enemigos cerca del powerup");
-                behaviourTree.Blackboard2["PowerupObject"] = powerup;
+                behaviourTree.Blackboard2["PowerupObject"] = (Powerup)powerup;
                 return Result.Success;
             }
-            return Result.Failure;
+
+            // Verificar estrategia agresiva y que tenga el jugador tenga powerup de ataque activo
+            if (gm.currentEnemyStrategy==GameManager.Strategy.Defensive && p.tag == "PlayerPowerup1" && IsWithinRange(p.transform.position, unit.transform.position, unit.unitRange)){
+                behaviourTree.Blackboard2["PowerupObject"] = (Powerup)powerup;
+                return Result.Success;
+            }
+
+            if (IsWithinRange(p.transform.position, unit.transform.position, unit.unitRange)){
+                behaviourTree.Blackboard2["PowerupObject"] = (Powerup)powerup;
+                return Result.Success;
+            }
         }
-        else
-        {
-            return Result.Failure;
-        }
+        return Result.Failure;
     }
 
     private bool IsWithinRange(Vector3 pointA, Vector3 pointB, float range)
