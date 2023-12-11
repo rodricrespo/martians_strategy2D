@@ -58,9 +58,9 @@ public class GameManager : MonoBehaviour
             unit.CheckDeath();
         }
 
-        foreach (Powerup p in FindObjectsOfType<Powerup>()) {
-            p.CheckPowerupDeath();
-        }
+        // foreach (Powerup p in FindObjectsOfType<Powerup>()) {
+        //     p.CheckPowerupDeath();
+        // }
 
         Debug.Log(currentEnemyStrategy);
     }
@@ -126,7 +126,7 @@ public class GameManager : MonoBehaviour
         {
             
             if (enemyUnit.tag == "EnemyUnit1" || enemyUnit.tag == "EnemyUnit2"){
-                if (currentEnemyStrategy==Strategy.Normal){
+                if (currentEnemyStrategy==Strategy.Normal || currentEnemyStrategy==Strategy.Aggressive){
                     enemyUnit.unitRoot = 
                         new Repeater(behaviourTree, new Selector( behaviourTree, new  BTNode[] { 
                                                                                                   new Repeater (behaviourTree, new Sequencer (behaviourTree, new BTNode[] {
@@ -147,7 +147,7 @@ public class GameManager : MonoBehaviour
                                                                 )
                                     );
                 }
-                else if (currentEnemyStrategy==Strategy.Defensive){
+                else{
                     enemyUnit.unitRoot = new Repeater(behaviourTree, new Selector( behaviourTree, new  BTNode[] {
                                                                                                                     new Repeater( behaviourTree, new Selector (behaviourTree, new BTNode[]{
                                                                                                                                                                                             new Repeater (behaviourTree, new Sequencer (behaviourTree, new BTNode[] {
@@ -173,27 +173,27 @@ public class GameManager : MonoBehaviour
                                                                                  )
                                                      );
                 }
-                else // Strategy.Aggressive
-                {
-                    enemyUnit.unitRoot = new Repeater(behaviourTree, new Selector( behaviourTree, new  BTNode[] {
-                                                                                                                    new Repeater( behaviourTree, new Selector (behaviourTree, new BTNode[]{
-                                                                                                                                                                                                new CheckPowerupInRange(behaviourTree, this, enemyUnit),
-                                                                                                                                                                                                new AttackPowerup(behaviourTree, enemyUnit, this)
-                                                                                                                                                                                          }
-                                                                                                                                                              )
-                                                                                                                                ),
-                                                                                                                                new MoveEnemy(behaviourTree, enemyUnit, grid, this), //MOVER HACIA POWERUP
-                                                                                                                    new Repeater (behaviourTree, new Sequencer (behaviourTree, new BTNode[]{
-                                                                                                                                                                                                new CheckEnemiesInRange(behaviourTree, enemyUnit),
-                                                                                                                                                                                                new Attack(behaviourTree, enemyUnit, this)
-                                                                                                                                                                                            }
-                                                                                                                                                               )
+                // else // Strategy.Aggressive
+                // {
+                //     enemyUnit.unitRoot = new Repeater(behaviourTree, new Selector( behaviourTree, new  BTNode[] {
+                //                                                                                                     new Repeater( behaviourTree, new Selector (behaviourTree, new BTNode[]{
+                //                                                                                                                                                                                 new CheckPowerupInRange(behaviourTree, this, enemyUnit),
+                //                                                                                                                                                                                 new AttackPowerup(behaviourTree, enemyUnit, this)
+                //                                                                                                                                                                           }
+                //                                                                                                                                               )
+                //                                                                                                                 ),
+                //                                                                                                                 new MoveEnemy(behaviourTree, enemyUnit, grid, this), //MOVER HACIA POWERUP
+                //                                                                                                     new Repeater (behaviourTree, new Sequencer (behaviourTree, new BTNode[]{
+                //                                                                                                                                                                                 new CheckEnemiesInRange(behaviourTree, enemyUnit),
+                //                                                                                                                                                                                 new Attack(behaviourTree, enemyUnit, this)
+                //                                                                                                                                                                             }
+                //                                                                                                                                                )
                                                                                                                                                 
-                                                                                                                                 ), new MoveEnemy(behaviourTree, enemyUnit, grid, this)
-                                                                                                                }
-                                                                                 )
-                                                     );
-                }
+                //                                                                                                                  ), new MoveEnemy(behaviourTree, enemyUnit, grid, this)
+                //                                                                                                 }
+                //                                                                  )
+                //                                      );
+                // }
 
                 StartCoroutine(behaviourTree.RunBehavior(enemyUnit.unitRoot));
                 

@@ -71,21 +71,21 @@ public class MoveEnemy : BTNode
         }
 
         else { //gm.currentEnemyStrategy == GameManager.Strategy.Defensive
-            if (behaviourTree.Blackboard2 != null && behaviourTree.Blackboard2.TryGetValue("PowerupObject", out Powerup powerup))
-            {
-                Debug.Log("HACIA LA POSICION DEL NODO PARA ATACARLO");
-                Node targetNode = grid.NodeFromWorldPoint(powerup.transform.position);
+            // if (behaviourTree.Blackboard2 != null && behaviourTree.Blackboard2.TryGetValue("PowerupObject", out Powerup powerup))
+            // {
+            //     Debug.Log("HACIA LA POSICION DEL NODO PARA ATACARLO");
+            //     Node targetNode = grid.NodeFromWorldPoint(powerup.transform.position);
 
-                if (targetNode != null)
-                {
-                     if (unit!=null)unit.MoveToNode(targetNode);
-                    return Result.Success;
-                }
-                else return Result.Failure;
+            //     if (targetNode != null)
+            //     {
+            //          if (unit!=null)unit.MoveToNode(targetNode);
+            //         return Result.Success;
+            //     }
+            //     else return Result.Failure;
                 
-            }
-            else
-            {
+            // }
+            // else
+            // {
                 // La clave 'PowerupObject' no está presente en el Blackboard
                 Vector3 randomPosition = grid.GetRandomWalkablePosition();
                 if (randomPosition != Vector3.zero)
@@ -95,7 +95,7 @@ public class MoveEnemy : BTNode
                     return Result.Success;
                 }
                 else return Result.Failure;  
-            }
+            //}
         } 
         
     }

@@ -248,6 +248,7 @@ public class Unit : MonoBehaviour
             {
                 deathNode.walkable = true;
                 deathNode.hasUnit = false;
+                deathNode.unit = null;
                 // Remover la unidad del diccionario Blackboard
                 if (gm.behaviourTree.Blackboard.ContainsKey("enemyUnit"))
                 {
@@ -284,11 +285,11 @@ public class Unit : MonoBehaviour
                     canAttack = true;
                     playerTarget = neighbour.unit;
                 }
-                // //Su target es un Powerup
-                else if (neighbour != null && neighbour.hasPowerup && neighbour.powerup != null && (neighbour.powerup.tag == "EnemyPowerup1" || neighbour.unit.tag == "EnemyPowerup2" || neighbour.unit.tag == "EnemyPowerup3")){
-                    canAttack = true;
-                    playerPowerupTarget = neighbour.powerup;
-                }
+                // // //Su target es un Powerup
+                // else if (neighbour != null && neighbour.hasPowerup && neighbour.powerup != null && (neighbour.powerup.tag == "EnemyPowerup1" || neighbour.unit.tag == "EnemyPowerup2" || neighbour.unit.tag == "EnemyPowerup3")){
+                //     canAttack = true;
+                //     playerPowerupTarget = neighbour.powerup;
+                // }
             }
         }
     }
